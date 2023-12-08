@@ -1,0 +1,10 @@
+.subtitle {
+    margin-left: 1rem;
+}
+
+.body {
+    background-color: #cedeff;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 80px);
+}
