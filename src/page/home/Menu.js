@@ -1,9 +1,9 @@
 import "../../component/common/content/Content"
 import Content from "../../component/common/content/Content";
-const Home = () => {
+const Menu = () => {
   return (
-      <Content subtitle={"Home"} />
+      <Content subtitle={"Menu"} />
   )
 };
 
-export default Home;
+export default Menu;

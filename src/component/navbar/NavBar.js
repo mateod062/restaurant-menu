@@ -5,11 +5,11 @@ const NavBar = () => {
   return (
       <>
         <nav className={"navigation"}>
-          <Link to={"/"} className={"title"}>Menu</Link>
+          <Link to={"/"} className={"title"}>Restaurant Mini</Link>
           <div className={"navigation-menu"}>
             <ul>
               <li>
-                <Link to="/">Home</Link>
+                <Link to="/">Menu</Link>
               </li>
               <li>
                 <Link to="/meals">Meals</Link>

@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './App.css';
-import Home from "./page/home/Home";
+import Menu from "./page/home/Menu";
 import Info from "./page/info/Info";
 import Login from "./page/login/Login";
 import Meals from "./page/meals/Meals";
@@ -29,7 +29,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<NavBar />}>
-            <Route index element={<Home />} />
+            <Route index element={<Menu />} />
             <Route path="info" element={<Info />} />
             <Route path="login" element={<Login />} />
             <Route path="meals" element={<Meals />} />
