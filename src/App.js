@@ -6,6 +6,7 @@ import Login from "./page/login/Login";
 import Meals from "./page/meals/Meals";
 import NoPage from "./page/nopage/NoPage";
 import NavBar from "./component/navbar/NavBar";
+import Employees from "./page/employees/Employees";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="info" element={<Info />} />
             <Route path="login" element={<Login />} />
             <Route path="meals" element={<Meals />} />
+            <Route path={"employees"} element={<Employees />} />
             <Route path={"*"} element={<NoPage />} />
           </Route>
         </Routes>
