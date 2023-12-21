@@ -22,7 +22,7 @@ export default function Employees() {
 
     return (
         <Content subtitle={"Employees"}>
-            <div className={"container rounded-3 border border-5 border-darkblue bg-secondary-subtle w-50 ms-5 my-5"}>
+            <div className={"container rounded-3 border border-5 border-darkblue bg-secondary-subtle w-50 mx-auto my-5"}>
                 <table className={"table"}>
                     <thead>
                     <tr className={"table-secondary"}>
