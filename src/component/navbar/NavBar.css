@@ -1,31 +1,8 @@
-.navigation {
-    height: 80px;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-    padding: 0.5rem 0.5rem;
-    background-color: darkblue;
-    color: white;
-    box-shadow: 0 2px 2px 5px rgba(9, 9, 9, 0.23);
-}
-
 .title {
-    text-decoration: none;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-left: 1rem;
-    margin-bottom: 1rem;
-}
-
-.navigation-menu {
-    margin-right: auto;
+    color: orange;
 }
 
 .navigation-menu ul {
-    display: flex;
     margin-top: 2rem;
 }
 
@@ -35,9 +12,9 @@
 }
 
 .navigation-menu li a {
-    text-decoration: underline;
+    text-decoration: none;
     display: block;
     width: 100%;
-    color: white;
+    color: orange;
     font-size: 1.3rem;
 }
