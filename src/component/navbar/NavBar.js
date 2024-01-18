@@ -6,7 +6,8 @@ const NavBar = () => {
       <>
         <nav className={"navbar bg-black"}>
           <Link to={"/"} className={"fs-1 ps-4 pb-3 text-decoration-none title col"}>Restaurant Mini</Link>
-          <ul className={"navigation-menu list-group list-group-horizontal"}>
+          <div>
+          <ul className={"navigation-menu list-group list-group-horizontal pe-1"}>
             <li>
               <Link to="/">Menu</Link>
             </li>
@@ -23,6 +24,7 @@ const NavBar = () => {
               <Link to="/login">Login</Link>
             </li>
           </ul>
+          </div>
         </nav>
 
         <Outlet/>

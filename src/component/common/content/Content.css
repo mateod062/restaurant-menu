@@ -1,9 +1,8 @@
 .text {
-    color: orange;
+    color: #DCB341;
 }
 
 .body {
     flex-direction: column;
     height: calc(100vh - 80px);
-    background-color: #0E0E0E;
 }
