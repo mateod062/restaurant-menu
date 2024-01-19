@@ -1,5 +1,8 @@
+import useAuth from "../../../hooks/useAuth";
 
 const MealCategory = ({category, meals}) => {
+    const {auth} = useAuth()
+
     return (
         <tbody>
             <tr className={"table-secondary"}>
@@ -7,8 +10,20 @@ const MealCategory = ({category, meals}) => {
             </tr>
             {meals.map((meal, index) =>
                 <tr key={index} className={"table-secondary border"}>
-                    <td>{meal[0]}</td>
-                    <td>{meal[1]}</td>
+                    <td>{meal.name}</td>
+                    <td>
+                        <div className={"d-flex flex-row gap-3"}>
+                            {meal.price}€
+                            <button type={"button"}
+                                    className={auth?.accessToken ? "btn btn-primary" : "invisible"}>
+                                <i className={"bi bi-pencil-square"}></i>
+                            </button>
+                            <button type={"button"}
+                                    className={auth?.accessToken ? "btn btn-danger" : "invisible"}>
+                                <i className={"bi bi-trash3-fill"}></i>
+                            </button>
+                        </div>
+                    </td>
                 </tr>
             )}
         </tbody>

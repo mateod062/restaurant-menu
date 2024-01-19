@@ -1,24 +1,36 @@
 import Content from "../../component/common/content/Content";
 import "./Employees.css"
+import {useEffect, useState} from "react";
+import axios from "../../api/axios";
 
 export default function Employees() {
 
-    const employees = [
-        ["Ivan", "Ivić", "Cook"],
-        ["Marko", "Marić", "Cashier"],
-        ["Ana", "Anić", "Cook"],
-        ["Ivana", "Ivić", "Cashier"],
-        ["Mate", "Matić", "Cook"],
-        ["Maja", "Majić", "Cashier"],
-        ["Ivo", "Ivić", "Cook"],
-        ["Mia", "Mijić", "Cashier"],
-        ["Iva", "Ivić", "Cook"],
-        ["Luka", "Lukić", "Cashier"],
-        ["Petar", "Petrović", "Cook"],
-        ["Lana", "Lanić", "Cashier"],
-        ["Josip", "Josipović", "Cook"],
-        ["Lara", "Larić", "Cashier"],
-    ]; /*Hardcoded employees*/
+    const [users, setUsers] = useState([])
+
+    useEffect(() => {
+        let isMounted = true
+        const controller = new AbortController()
+
+        const getEmployees = async () => {
+            try {
+                const response = await axios.get('/users', {
+                    signal: controller.signal
+                })
+                console.log(response.data)
+                isMounted && setUsers(response.data)
+            } catch (e) {
+                console.error(e)
+            }
+        }
+
+        getEmployees()
+
+        return () => {
+            isMounted = false
+            controller.abort()
+        }
+    }, [])
+
 
     return (
         <Content subtitle={"Employees"}>
@@ -32,16 +44,22 @@ export default function Employees() {
                     </tr>
                     </thead>
                     <tbody>
-                    {employees.map((employee, index) => {
-                        return (
-                            <tr key={index} className={"table-secondary"}>
-                                <td>{employee[0]}</td>
-                                <td>{employee[1]}</td>
-                                <td>{employee[2]}</td>
+                    {users?.length
+                        ? users.map((employee, index) => {
+                            return (
+                                <tr key={index} className={"table-secondary"}>
+                                    <td>{employee.name}</td>
+                                    <td>{employee.email}</td>
+                                    <td>{employee.is_admin ? 'Admin' : 'Employee'}</td>
+                                </tr>
+                            )
+                            })
+                        :
+                            <tr className={"table-secondary"}>
+                            <td colSpan={3} align={"center"}>No employees</td>
                             </tr>
-                        )
-                    })}
-                    </tbody>
+                    }
+                </tbody>
                 </table>
             </div>
         </Content>

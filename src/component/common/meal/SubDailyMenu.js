@@ -9,7 +9,7 @@ const SubDailyMenu = ({title, menus, meals}) => {
                     <h2 className={"text-white"}>{title}</h2>
                 </div>
                 {menus.map((menuName, i) => (
-                    <div className={menuName === "Vege menu"
+                    <div key={i} className={menuName === "Vege menu"
                         ? "row bg-secondary-subtle ps-2 pe-2 pb-2"
                         : "row bg-secondary-subtle ps-2 pe-2"}>
                         <Menu name={menuName}>
