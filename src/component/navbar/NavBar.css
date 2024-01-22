@@ -20,10 +20,6 @@
     margin-bottom: 1rem;
 }
 
-.navigation-menu {
-    margin-right: auto;
-}
-
 .navigation-menu ul {
     display: flex;
     margin-top: 2rem;
