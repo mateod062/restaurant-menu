@@ -30,7 +30,7 @@
     margin: 0 2rem;
 }
 
-.navigation-menu li a {
+.navigation-menu li a p {
     text-decoration: underline;
     display: block;
     width: 100%;

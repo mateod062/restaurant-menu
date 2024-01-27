@@ -5,6 +5,7 @@ import SubDailyMenu from "../../component/common/meal/SubDailyMenu";
 import useAuth from "../../hooks/useAuth";
 import {useEffect, useState} from "react";
 import axios from "../../api/axios";
+import meals from "../meals/Meals";
 
 const DailyMenu = () => {
 
@@ -12,29 +13,25 @@ const DailyMenu = () => {
     const [dailyMenu, setDailyMenu] = useState([]);
     const [lunch, setLunch] = useState([]);
     const [dinner, setDinner] = useState([]);
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        let isMounted = true;
-        const controller = new AbortController();
 
         const getDailyMenu = async () => {
+            setLoading(true)
             try {
-                const response = await axios.get('/daily-menus', {
-                    signal: controller.signal
-                })
+                const response = await axios.get('/daily-menus')
                 console.log(response?.data)
-                isMounted && setDailyMenu(response?.data)
+                setDailyMenu(response?.data)
             } catch (e) {
                 console.error(e)
             }
+            setLoading(false)
         }
+
 
         getDailyMenu()
 
-        return () => {
-            isMounted = false
-            controller.abort()
-        }
     }, [])
 
     useEffect(() => {
@@ -58,8 +55,9 @@ const DailyMenu = () => {
         <Content subtitle={"Menu"}>
             <div className={"d-flex flex-column gap-3 mx-5"}>
                 <div className={"d-flex flex-column mx-5"}>
-                    <SubDailyMenu title={"Lunch"} menus={lunch}/>
-                    <SubDailyMenu title={"Dinner"} menus={dinner}/>
+                    <SubDailyMenu title={"Lunch"} menus={lunch} setDailyMenu={setDailyMenu} loading={loading}/>
+                    {console.log(lunch)}
+                    <SubDailyMenu title={"Dinner"} menus={dinner} setDailyMenu={setDailyMenu} loading={loading}/>
                 </div>
             </div>
 

@@ -3,8 +3,20 @@ import MealCategory from "../../component/common/meals/MealCategory";
 import {useEffect, useRef, useState} from "react";
 import axios from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
-import {Modal, Button, Form, InputGroup, FloatingLabel, Card, FormCheck, Alert, Table} from "react-bootstrap";
+import {
+    Modal,
+    Button,
+    Form,
+    InputGroup,
+    FloatingLabel,
+    Card,
+    FormCheck,
+    Alert,
+    Table,
+    ModalHeader, Placeholder, Spinner
+} from "react-bootstrap";
 import "./Meals.css"
+import ErrorModal from "../../component/common/error/ErrorModal";
 const Meals = () => {
     const {auth} = useAuth()
 
@@ -18,11 +30,12 @@ const Meals = () => {
     const [desserts, setDesserts] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [addMealFormValidated, setAddMealFormValidated] = useState(false)
-    const [addMealErrorMessage, setAddMealErrorMessage] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
+    const [showErrorModal, setShowErrorModal] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     const handleAddMeal = async (event) => {
         event.preventDefault();
-        const form = event.currentTarget
 
         const formData = new FormData(addMealFormRef.current);
         const data = Object.fromEntries(formData.entries());
@@ -32,49 +45,51 @@ const Meals = () => {
             category: data['category'],
             price: data['price']
         }
-        console.log(JSON.stringify(newMeal));
 
         if (!data['name'] || !data['category'] || !data['price'] || !data['price'].match(/^\d+(\.\d{1,2})?$/)) {
             setAddMealFormValidated(true)
             return;
         }
 
+        setLoading(true)
         try {
             const responsePostMeal = await axios.post('/meals', newMeal)
             console.log(responsePostMeal.data)
-            const responseGetMeals = await axios.get('/meals')
+            setMeals(prevMeals => {
+                const mealToAdd = {
+                    id: responsePostMeal.data.id,
+                    name: responsePostMeal.data.name,
+                    category: responsePostMeal.data.category,
+                    price: responsePostMeal.data.price
+                }
+                return [...prevMeals, mealToAdd]
+            })
 
-            setMeals(responseGetMeals.data)
             setAddMealFormValidated(false)
             setShowModal(false);
         }
         catch (error) {
             console.log(error)
-            setAddMealErrorMessage("An error occurred.")
+            setErrorMessage("An error occurred.")
         }
+        setLoading(false)
     }
 
     useEffect(() => {
-        let isMounted = true
-        const controller = new AbortController()
         const getMeals = async () => {
+            setLoading(true)
             try {
-                const response = await axios.get('/meals', {
-                    signal: controller.signal
-                })
+                const response = await axios.get('/meals')
                 console.log(response.data)
-                isMounted && setMeals(response.data)
+                setMeals(response.data)
             } catch (e) {
                 console.error(e)
             }
+            setLoading(false)
         }
 
         getMeals()
 
-        return () => {
-            isMounted = false
-            controller.abort()
-        }
     }, [])
 
     useEffect(() => {
@@ -101,7 +116,7 @@ const Meals = () => {
                                 <button
                                     type={"button"}
                                     className={auth?.accessToken ? "btn btn-primary ms-auto" : "invisible"}
-                                    onClick={() => setShowModal(true)   }
+                                    onClick={() => setShowModal(true)}
                                 >
                                     <i className={"bi bi-plus-square"}></i>
                                     <span className={"ms-2"}>Add meal</span>
@@ -110,13 +125,15 @@ const Meals = () => {
                         </th>
                     </tr>
                     </thead>
-                    <MealCategory category={"Pizze"} meals={pizzas} setMeals={setMeals}/>
-                    <MealCategory category={"Juhe"} meals={soups} setMeals={setMeals}/>
-                    <MealCategory category={"Glavna jela"} meals={mainMeals} setMeals={setMeals}/>
-                    <MealCategory category={"Prilozi"} meals={sideDishes} setMeals={setMeals}/>
-                    <MealCategory category={"Deserti"} meals={desserts} setMeals={setMeals}/>
+                    <MealCategory category={"Pizze"} meals={pizzas} setMeals={setMeals} loading={loading}/>
+                    <MealCategory category={"Juhe"} meals={soups} setMeals={setMeals} loading={loading}/>
+                    <MealCategory category={"Glavna jela"} meals={mainMeals} setMeals={setMeals} loading={loading}/>
+                    <MealCategory category={"Prilozi"} meals={sideDishes} setMeals={setMeals} loading={loading}/>
+                    <MealCategory category={"Deserti"} meals={desserts} setMeals={setMeals} loading={loading}/>
                 </Table>
             </div>
+
+            <ErrorModal show={showErrorModal} onHide={() => setShowErrorModal(false)} message={errorMessage} />
 
             <Modal show={showModal} onHide={() => setShowModal(false)} backdrop="static">
                 <Modal.Header className={"bg-primary text-white"} closeButton>
@@ -133,7 +150,7 @@ const Meals = () => {
                                     required
                                 />
                                 <Form.Control.Feedback type={"invalid"}>
-                                    Please enter a valid name
+                                Please enter a valid name
                                 </Form.Control.Feedback>
                             </FloatingLabel>
                         </Form.Group>
@@ -199,9 +216,6 @@ const Meals = () => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Alert variant={"danger"} className={addMealErrorMessage ? "me-auto" : "invisible"}>
-                        {addMealErrorMessage}
-                    </Alert>
                     <Button variant={"secondary"} onClick={() => {
                         {
                             setShowModal(false)
@@ -211,7 +225,12 @@ const Meals = () => {
                         Close
                     </Button>
                     <Button variant={"primary"} onClick={handleAddMeal}>
-                        Add meal
+                        {loading ? (
+                            <Spinner animation="border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </Spinner>
+                        ) : "Add meal"
+                        }
                     </Button>
                 </Modal.Footer>
             </Modal>

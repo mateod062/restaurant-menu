@@ -1,35 +1,201 @@
 import useAuth from "../../../hooks/useAuth";
+import {Alert, Button, Form, Modal, ModalHeader, Spinner} from "react-bootstrap";
+import {useEffect, useRef, useState} from "react";
+import Meal from "./Meal";
+import axios from "../../../api/axios";
+import ErrorModal from "../error/ErrorModal";
+import SpinnerModal from "../loading/SpinnerModal";
 
-const Menu = ({name, children, bottomLine = true}) => {
+const Menu = ({dailyMenuTitle, dailyMenu, menu, setDailyMenu, bottomLine = true}) => {
     const {auth} = useAuth()
 
-    return (
-        <div className={bottomLine
-            ? "container border-bottom border-2 border-black p-2"
-            : "container p-2"
-        }>
-            <div className={"row"}>
-                <div className={"row"}>
-                    <div className={"col"}>
-                        <h3>{name}</h3>
-                    </div>
-                    {
-                        auth?.accessToken
-                            ? <div className={"col"} align={"end"}>
-                                <button type={"button"} className={"btn btn-primary"}>
-                                    <i className={"bi bi-pencil-square"}></i>
-                                    <span className={"ms-2"}>Edit</span>
-                                </button>
-                            </div>
-                            : null
+    const editMenuFormRef = useRef()
 
-                    }
-                </div>
-                <div className={"col"}>
-                    {children}
+    const [meals, setMeals] = useState([])
+    const [soups, setSoups] = useState([])
+    const [mainMeals, setMainMeals] = useState([])
+    const [sideDishes, setSideDishes] = useState([])
+    const [desserts, setDesserts] = useState([])
+    const [errorMessage, setErrorMessage] = useState("")
+    const [loading, setLoading] = useState(false)
+
+    const [showEditMenuModal, setShowEditMenuModal] = useState(false)
+    const [showErrorModal, setShowErrorModal] = useState(false)
+
+    const handleEditMenu = async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(editMenuFormRef.current);
+        const data = Object.fromEntries(formData.entries());
+
+        const newMenu = {
+            title: menu.title,
+            soup: data['soup'],
+            main_meal: data['mainMeal'],
+            side_dish: data['sideDish'],
+            dessert: data['dessert'],
+            daily_menu_title: dailyMenuTitle
+
+        }
+        console.log(JSON.stringify(newMenu));
+
+        try {
+            const responsePatchMenu = await axios.patch(`/menus/${menu.id}`, newMenu)
+            console.log(responsePatchMenu.data)
+
+            setDailyMenu(prevMenus => {
+                const newMenus = [...prevMenus];
+                const index = newMenus.findIndex(m => m.id === menu.id);
+                newMenus[index] = responsePatchMenu.data;
+                return newMenus;
+            });
+            setShowEditMenuModal(false);
+        }
+        catch (error) {
+            console.log(error)
+            setErrorMessage("An error occurred")
+        }
+    }
+
+    useEffect(() => {
+        setLoading(true)
+        try {
+            const getMeals = async () => {
+                const response = await axios.get('/meals')
+                setMeals(response.data)
+            }
+
+            getMeals()
+        }
+        catch (error) {
+            console.error(error)
+            setErrorMessage("An error occurred")
+            setShowErrorModal(true)
+        }
+        setLoading(false)
+    }, [])
+
+    useEffect(() => {
+        setSoups(meals.filter(meal => meal.category === "Soup"))
+        setMainMeals(meals.filter(meal => meal.category === "Main meal" || meal.category === "Pizza"))
+        setSideDishes(meals.filter(meal => meal.category === "Side dish"))
+        setDesserts(meals.filter(meal => meal.category === "Dessert"))
+    }, [meals])
+
+    return (
+        <>
+            <div className={bottomLine
+                ? "container border-bottom border-2 border-black p-2"
+                : "container p-2"
+            }>
+                <div className={"row"}>
+                    <div className={"row"}>
+                        <div className={"col"}>
+                            <h3>{menu.title}</h3>
+                        </div>
+                        {
+                            auth?.accessToken
+                                ? <div className={"col"} align={"end"}>
+                                    <button
+                                        type={"button"}
+                                        className={"btn btn-primary"}
+                                        onClick={() => {
+                                            setShowEditMenuModal(true)
+                                            console.log(menu)
+                                        }}
+                                    >
+                                        <i className={"bi bi-pencil-square"}></i>
+                                        <span className={"ms-2"}>Edit</span>
+                                    </button>
+                                </div>
+                                : null
+
+                        }
+                    </div>
+                    <div className={"col"}>
+                        {menu && menu.soup && <Meal mealName={menu.soup} mealCategory={"Soup"} />}
+                        {menu && menu.main_meal && <Meal mealName={menu.main_meal} mealCategory={"Main meal"} />}
+                        {menu && menu.side_dish && <Meal mealName={menu.side_dish} mealCategory={"Side dish"} />}
+                        {menu && menu.dessert && <Meal mealName={menu.dessert} mealCategory={"Dessert"} />}
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <ErrorModal show={showErrorModal} onHide={() => setShowErrorModal(false)} message={errorMessage} />
+
+            <SpinnerModal show={loading && !showEditMenuModal} />
+
+            <Modal show={showEditMenuModal} onHide={() => setShowEditMenuModal(false)}>
+                <Modal.Header className={"bg-primary text-white"} closeButton>
+                    <Modal.Title>Edit {menu.title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form ref={editMenuFormRef} onSubmit={handleEditMenu}>
+                        <Form.Group className={"mb-3"} controlId={"selectSoup"}>
+                            <Form.Label>Select a soup</Form.Label>
+                            <Form.Select name={"soup"} defaultValue={menu.soup}>
+                                {soups.map((soup) =>
+                                    <option
+                                        key={soup.id}
+                                        value={soup.name}
+                                    >
+                                        {soup.name}
+                                    </option>
+                                )}
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group className={"mb-3"} controlId={"selectMainMeal"}>
+                            <Form.Label>Select a main meal</Form.Label>
+                            <Form.Select name={"mainMeal"} defaultValue={menu.main_meal}>
+                                {mainMeals.map((mainMeal) =>
+                                    <option
+                                        key={mainMeal.id}
+                                        value={mainMeal.name}
+                                        >
+                                        {mainMeal.name}
+                                    </option>
+                                )}
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group className={"mb-3"} controlId={"selectSideDish"}>
+                            <Form.Label>Select a side dish</Form.Label>
+                            <Form.Select name={"sideDish"} defaultValue={menu.side_dish}>
+                                {sideDishes.map((sideDish) =>
+                                    <option
+                                        key={sideDish.id}
+                                        value={sideDish.name}
+                                        >
+                                        {sideDish.name}
+                                    </option>
+                                )}
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group className={"mb-3"} controlId={"selectDessert"}>
+                            <Form.Label>Select a dessert</Form.Label>
+                            <Form.Select name={"dessert"} defaultValue={menu.dessert}>
+                                {desserts.map((dessert) =>
+                                    <option
+                                        key={dessert.id}
+                                        value={dessert.name}
+                                        >
+                                        {dessert.name}
+                                    </option>
+                                )}
+                            </Form.Select>
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant={"secondary"} onClick={() => setShowEditMenuModal(false)}>
+                        Close
+                    </Button>
+                    <Button variant={"primary"} onClick={handleEditMenu}>
+                        Save
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+
     )
 }
 

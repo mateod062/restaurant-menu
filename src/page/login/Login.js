@@ -4,6 +4,7 @@ import axios from "../../api/axios";
 import {useLocation, useNavigate} from "react-router-dom";
 import AuthContext from "../../context/AuthProvider";
 import useAuth from "../../hooks/useAuth";
+import SpinnerModal from "../../component/common/loading/SpinnerModal";
 
 const Login = () => {
 
@@ -16,6 +17,7 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("")
+    const [loading, setLoading] = useState(false)
 
     const navigate = useNavigate()
     const location = useLocation()
@@ -47,6 +49,7 @@ const Login = () => {
         }
 
         try {
+            setLoading(true)
             const response = await axios.post(
                 '/auth/login',
                 JSON.stringify({
@@ -61,11 +64,13 @@ const Login = () => {
             console.log(JSON.stringify(response?.data))
 
             const accessToken = response?.data?.access_token
-            const userName = response?.data?.name
+            const firstName = response?.data?.name
+            const lastName = response?.data?.last_name
             const isAdmin = response?.data?.is_admin
 
             setAuth({
-                userName,
+                firstName,
+                lastName,
                 email,
                 password,
                 isAdmin,
@@ -73,6 +78,15 @@ const Login = () => {
             })
             setEmail('')
             setPassword('')
+
+            sessionStorage.setItem('auth', JSON.stringify({
+                firstName,
+                lastName,
+                email,
+                password,
+                isAdmin,
+                accessToken
+            }));
 
             navigate(from, {replace: true})
         } catch (e) {
@@ -86,59 +100,65 @@ const Login = () => {
                 setErrorMessage("Login Failed")
             }
         }
+
+        setLoading(false)
     };
 
     return (
-        <Content subtitle={"Login"}>
-            <form onSubmit={handleSubmit}>
-                <div className={"w-50 d-flex flex-column justify-content-start mx-5 mt-5"}>
-                    <div className="form-group">
-                        <label htmlFor="inputEmail">Email address</label>
-                        <input
-                            type="email"
-                            className="form-control"
-                            onChange={handleEmailChange}
-                            ref={emailRef}
-                            id={"inputEmail"}
-                            aria-describedby="emailHelp"
-                            placeholder="Enter email"
-                            required
-                        />
-                    </div>
-                    <div className="form-group mt-3">
-                        <label htmlFor="inputPassowrd">Password</label>
-                        <div className={"form-group row"}>
-                            <div className={"col"}>
-                                <input
-                                    type={passwordVisible ? "text" : "password"}
-                                    className="form-control"
-                                    onChange={handlePasswordChange}
-                                    id="inputPassword"
-                                    placeholder="Password"
-                                    required
-                                />
-                            </div>
-                            <div className={"col-auto"}>
-                                <button
-                                    type={"button"}
-                                    className={"btn btn-primary ml-5"}
-                                    onClick={() => setPasswordVisible(!passwordVisible)}>
-                                    {passwordVisible
-                                        ? <i className={"bi bi-eye"}/>
-                                        : <i className={"bi bi-eye-slash"}/>}
-                                </button>
+        <>
+            <Content subtitle={"Login"}>
+                <form onSubmit={handleSubmit}>
+                    <div className={"w-50 d-flex flex-column justify-content-start mx-5 mt-5"}>
+                        <div className="form-group">
+                            <label htmlFor="inputEmail">Email address</label>
+                            <input
+                                type="email"
+                                className="form-control"
+                                onChange={handleEmailChange}
+                                ref={emailRef}
+                                id={"inputEmail"}
+                                aria-describedby="emailHelp"
+                                placeholder="Enter email"
+                                required
+                            />
+                        </div>
+                        <div className="form-group mt-3">
+                            <label htmlFor="inputPassowrd">Password</label>
+                            <div className={"form-group row"}>
+                                <div className={"col"}>
+                                    <input
+                                        type={passwordVisible ? "text" : "password"}
+                                        className="form-control"
+                                        onChange={handlePasswordChange}
+                                        id="inputPassword"
+                                        placeholder="Password"
+                                        required
+                                    />
+                                </div>
+                                <div className={"col-auto"}>
+                                    <button
+                                        type={"button"}
+                                        className={"btn btn-primary ml-5"}
+                                        onClick={() => setPasswordVisible(!passwordVisible)}>
+                                        {passwordVisible
+                                            ? <i className={"bi bi-eye"}/>
+                                            : <i className={"bi bi-eye-slash"}/>}
+                                    </button>
+                                </div>
                             </div>
                         </div>
+                        <button type="submit" className="btn btn-primary mt-3">Login</button>
+                        <div className={errorMessage ? "text-danger" : "d-none"}>
+                            <p ref={errorRef} aria-live={"assertive"}>
+                                {errorMessage}
+                            </p>
+                        </div>
                     </div>
-                    <button type="submit" className="btn btn-primary mt-3">Login</button>
-                    <div className={errorMessage ? "text-danger" : "d-none"}>
-                        <p ref={errorRef} aria-live={"assertive"}>
-                            {errorMessage}
-                        </p>
-                    </div>
-                </div>
-            </form>
-        </Content>
+                </form>
+            </Content>
+
+            <SpinnerModal show={loading} />
+        </>
     )
 };
 

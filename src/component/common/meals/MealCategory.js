@@ -1,15 +1,19 @@
 import useAuth from "../../../hooks/useAuth";
 import {useRef, useState} from "react";
-import {Alert, Button, FloatingLabel, Form, InputGroup, Modal, ModalHeader} from "react-bootstrap";
+import {Alert, Button, FloatingLabel, Form, InputGroup, Modal, ModalHeader, Spinner} from "react-bootstrap";
 import axios from "../../../api/axios";
+import ErrorModal from "../error/ErrorModal";
+import SpinnerModal from "../loading/SpinnerModal";
 
-const MealCategory = ({category, meals, setMeals}) => {
+const MealCategory = ({category, meals, setMeals, loading}) => {
     const {auth} = useAuth()
 
     const editMealFormRef = useRef()
 
     const [showEditMealModal, setShowEditMealModal] = useState(false)
-    const [showDeletionErrorModal, setShowDeletionErrorModal] = useState(false)
+    const [showErrorModal, setShowErrorModal] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
+    const [buttonLoading, setButtonLoading] = useState(false)
     const [editMealFormValidated, setEditMealFormValidated] = useState(false)
     const [editMealErrorMessage, setEditMealErrorMessage] = useState("")
     const [mealToEdit, setMealToEdit] = useState({name: "", category: "", price: ""})
@@ -33,6 +37,7 @@ const MealCategory = ({category, meals, setMeals}) => {
             return;
         }
 
+        setButtonLoading(true)
         try {
             const responsePatchMeal = await axios.patch(`/meals/${mealToEdit.id}`, newMeal)
             console.log(responsePatchMeal.data)
@@ -47,9 +52,11 @@ const MealCategory = ({category, meals, setMeals}) => {
             console.log(error)
             setEditMealErrorMessage("An error occurred.")
         }
+        setButtonLoading(false)
     }
 
     const handleDeleteMeal = async (mealId) => {
+        setButtonLoading(true)
 
         try {
             const responseDeleteMeal = await axios.delete(`/meals/${mealId}`)
@@ -57,11 +64,20 @@ const MealCategory = ({category, meals, setMeals}) => {
             const responseGetMeals = await axios.get('/meals')
 
             setMeals(responseGetMeals.data)
-            setShowDeletionErrorModal(false)
+            setShowErrorModal(false)
+
+            setButtonLoading(false)
         }
         catch (error) {
+            setButtonLoading(false)
             console.log(error)
-            if (error?.response?.status === 400) setShowDeletionErrorModal(true)
+            if (error?.response?.status === 400) {
+                setErrorMessage("Cannot delete a meal that is in a menu")
+            }
+            else {
+                setErrorMessage("Meal deletion failed")
+            }
+            setShowErrorModal(true)
         }
     }
 
@@ -71,60 +87,56 @@ const MealCategory = ({category, meals, setMeals}) => {
                 <tr className={"table-secondary"}>
                     <th scope={"col"} colSpan={2}>{category}</th>
                 </tr>
-                {meals.map((meal, index) =>
-                    <tr key={index} className={"table-secondary border"}>
-                        <td>{meal.name}</td>
-                        <td>
-                            <div className={"d-flex flex-row gap-3"}>
-                                {meal.price}€
-                                <button type={"button"}
-                                        className={auth?.accessToken ? "btn btn-primary" : "invisible"}
-                                        onClick={() => {
-                                            setMealToEdit({...meal})
-                                            setShowEditMealModal(true)
-                                        }}
-                                >
-                                    <i className={"bi bi-pencil-square"}></i>
-                                </button>
-                                <button type={"button"}
-                                        className={auth?.accessToken ? "btn btn-danger" : "invisible"}
-                                        onClick={() => {
-                                            console.log(meal)
-                                            handleDeleteMeal(meal.id)
-                                        }}
-                                >
-                                    <i className={"bi bi-trash3-fill"}></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                )}
+                {loading ? (
+                        <tr className={"table-secondary border"}>
+                            <td>
+                                <Spinner animation={"border"} role={"status"} />
+                            </td>
+                        </tr>
+                    )
+                    : (meals.map((meal, index) =>
+                        <tr key={index} className={"table-secondary border"}>
+                            <td>{meal.name}</td>
+                            <td>
+                                <div className={"d-flex flex-row gap-3"}>
+                                    {meal.price}€
+                                    {auth?.accessToken ? (
+                                        <Button variant={"primary"}
+                                                onClick={() => {
+                                                    setMealToEdit({...meal})
+                                                    setShowEditMealModal(true)
+                                                }}
+                                        >
+                                            <i className={"bi bi-pencil-square"}></i>
+                                        </Button>
+                                    ) : null
+                                    }
+                                    {auth?.accessToken ? (
+                                        <Button variant={"danger"}
+                                                onClick={() => {
+                                                    console.log(meal)
+                                                    handleDeleteMeal(meal.id)
+                                                }}
+                                        >
+                                            {buttonLoading ? (
+                                                <Spinner animation="border" role="status" size={"sm"}>
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </Spinner>
+                                            ) : (
+                                                <i className={"bi bi-trash3-fill"}></i>
+                                            )}
+                                        </Button>
+                                    ) : null
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    ))
+                }
             </tbody>
 
-{/*
-            Meal delete modal
-*/}
-            <Modal show={showDeletionErrorModal} onHide={() => setShowDeletionErrorModal(false)} >
-                <ModalHeader className={"bg-danger text-white"} closeButton>
-                    <Modal.Title>Error</Modal.Title>
-                </ModalHeader>
-                <Modal.Body>
-                    <Alert variant={"danger"}>
-                        Cannot delete a meal that is in a menu.
-                    </Alert>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant={"secondary"} onClick={() => setShowDeletionErrorModal(false)}>
-                        Ok
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <ErrorModal show={showErrorModal} onHide={() => setShowErrorModal(false)} message={errorMessage} />
 
-
-
-{/*
-            Meal add modal
-*/}
             <Modal show={showEditMealModal} onHide={() => {
                 setMealToEdit({name: "", category: "", price: ""})
                 setShowEditMealModal(false)
@@ -219,16 +231,19 @@ const MealCategory = ({category, meals, setMeals}) => {
                         {editMealErrorMessage}
                     </Alert>
                     <Button variant={"secondary"} onClick={() => {
-                        {
                             setShowEditMealModal(false)
                             setEditMealFormValidated(false)
                             setMealToEdit({name: "", category: "", price: ""})
-                        }
-                    }}>
+                            setEditMealErrorMessage("")
+                    }}
+                    >
                         Close
                     </Button>
-                    <Button variant={"primary"} onClick={handleEditMeal}>
-                        Edit meal
+                    <Button variant={"primary"} onClick={handleEditMeal} className={buttonLoading ? "px-3 py-2" : ""}>
+                        {buttonLoading
+                            ? <Spinner animation={"border"} role={"status"} className={"text-white"} size={"sm"} />
+                            : "Edit meal"
+                        }
                     </Button>
                 </Modal.Footer>
             </Modal>
