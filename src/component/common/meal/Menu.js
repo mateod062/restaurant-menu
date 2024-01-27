@@ -1,7 +1,8 @@
+import "./Border.css"
 const Menu = ({name, children}) => {
 
     return (
-        <div className={"container border-bottom border-2 border-black p-2"}>
+        <div className={"container border-bottom border-3 bottom p-2"}>
             <div className={"row"}>
                 <div className={"col"}>
                     <h3>{name}</h3>

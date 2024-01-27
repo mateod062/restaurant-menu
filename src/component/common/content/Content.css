@@ -1,13 +1,8 @@
-body {
-    background-color: #cedeff;
-}
-
-.subtitle {
-    margin-left: 1rem;
+.text {
+    color: #DCB341;
 }
 
 .body {
-    display: flex;
     flex-direction: column;
     height: calc(100vh - 80px);
 }

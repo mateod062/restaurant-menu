@@ -1,5 +1,6 @@
 import Content from "../../component/common/content/Content";
 import "./Employees.css"
+import "../../component/common/meal/Border.css"
 
 export default function Employees() {
 
@@ -22,10 +23,10 @@ export default function Employees() {
 
     return (
         <Content subtitle={"Employees"}>
-            <div className={"container rounded-3 border border-5 border-darkblue bg-secondary-subtle w-50 mx-auto my-5"}>
-                <table className={"table"}>
+            <div className={"container rounded-3 border border-3 bg-black w-50 mx-auto pt-3 my-4"}>
+                <table className={"table table-dark"}>
                     <thead>
-                    <tr className={"table-secondary"}>
+                    <tr className={"border-bottom bottom2 fs-3"}>
                         <th scope={"col"}>First name</th>
                         <th scope={"col"}>Last name</th>
                         <th scope={"col"}>Role</th>
@@ -34,7 +35,7 @@ export default function Employees() {
                     <tbody>
                     {employees.map((employee, index) => {
                         return (
-                            <tr key={index} className={"table-secondary"}>
+                            <tr key={index} className={"border-bottom bottom fs-5"}>
                                 <td>{employee[0]}</td>
                                 <td>{employee[1]}</td>
                                 <td>{employee[2]}</td>

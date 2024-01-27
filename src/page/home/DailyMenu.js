@@ -75,9 +75,9 @@ const DailyMenu = () => {
                   </div>
               </div>
           </div>*/}
-          <div className={"d-flex flex-row mx-5"}>
-                  <SubDailyMenu title={"Lunch"} menus={menus} meals={meals} />
-                  <SubDailyMenu title={"Dinner"} menus={menus} meals={meals} />
+          <div className={"d-flex row flex-row justify-content-center mx-5"}>
+                  <SubDailyMenu title={"Lunch"} className={"col"} menus={menus} meals={meals} />
+                  <SubDailyMenu title={"Dinner"} className={"col"} menus={menus} meals={meals} />
           </div>
       </Content>
     )
