@@ -1,3 +1,15 @@
+th {
+    font-size: 1.5rem !important;
+}
+
+td {
+    font-size: 1rem !important;
+}
+
+thead {
+    background-color: darkblue !important;
+}
+
 .bottom2{
     border-bottom-color: #DCB341 !important;
 }

@@ -1,85 +1,71 @@
 import "../../component/common/content/Content"
 import Content from "../../component/common/content/Content";
 import "./DailyMenu.css";
-import {useEffect, useState} from "react";
-import Config from "../../config/Config"
-import async from "async";
-import axios from "axios";
-import {set} from "react-hook-form";
-import Menu from "../../component/common/meal/Menu";
-import Meal from "../../component/common/meal/Meal";
 import SubDailyMenu from "../../component/common/meal/SubDailyMenu";
+import useAuth from "../../hooks/useAuth";
+import {useEffect, useState} from "react";
+import axios from "../../api/axios";
+import meals from "../meals/Meals";
+
 const DailyMenu = () => {
-    /*const[menu, setMenu] = useState(null);
+
+    const {auth} = useAuth();
+    const [meals, setMeals] = useState([])
+    const [dailyMenu, setDailyMenu] = useState([]);
+    const [lunch, setLunch] = useState([]);
+    const [dinner, setDinner] = useState([]);
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(Config.REST_API_URL + "/api/menu");
-                setMenu(response);
-            }
-            catch (e) {
-                console.error("Error fetching menu: ", e);
-            }
-        }
-    }, []);*/
 
-    const menus = ["Menu 1", "Menu 2", "Vege menu"];
-    const meals = [
-        [
-            { mealName: "Bistra juha", mealCategory: "Soup" },
-            { mealName: "Pohano", mealCategory: "Meat" },
-            { mealName: "Pomfrit", mealCategory: "Side" }
-        ],
-        [
-            { mealName: "Juha od brokule", mealCategory: "Soup" },
-            { mealName: "Pljeskavice", mealCategory: "Meat" },
-            { mealName: "Pomfrit", mealCategory: "Side" }
-        ],
-        [
-            { mealName: "Proljetna juha", mealCategory: "Soup" },
-            { mealName: "Medaljoni od soje", mealCategory: "Vegetarian" },
-            { mealName: "Pomfrit", mealCategory: "Side" }
-        ]
-    ] /*Hard-coded, to be refactored */
+        const fetchItems = async () => {
+            setLoading(true)
+            try {
+                const getMenusResponse = await axios.get('/daily-menus')
+                const getMealsResponse = await axios.get('/meals')
+                console.log(getMenusResponse?.data)
+                console.log(getMealsResponse?.data)
+                setMeals(getMealsResponse?.data)
+                setDailyMenu(getMenusResponse?.data)
+            }
+            catch (error) {
+                console.log(error)
+            }
+            setLoading(false)
+        }
+
+        fetchItems()
+
+    }, [])
+
+    useEffect(() => {
+        if (dailyMenu?.length) {
+            const lunchMenus = dailyMenu.reduce((acc, curr) => {
+                if (curr.title === "Lunch") acc.push(...curr.menus);
+                return acc;
+            }, []);
+
+            const dinnerMenus = dailyMenu.reduce((acc, curr) => {
+                if (curr.title === "Dinner") acc.push(...curr.menus);
+                return acc;
+            }, []);
+
+            setLunch(lunchMenus);
+            setDinner(dinnerMenus);
+        }
+    }, [dailyMenu])
 
     return (
-      <Content subtitle={"Menu"}>
-          {/*<div className={"container rounded border border-5 border-darkblue w-50 m-5"}>
-              <div className={"col"}>
-                  <div className={"row bg-darkblue"}>
-                      <h2 className={"text-white"}>Lunch</h2>
-                  </div>
-                  <div className={"row bg-secondary-subtle ps-2 pe-2"}>
-                      <Menu name={"Menu 1"}>
-                        <div className={"col"}>
-                            <Meal mealName={"Bistra juha"} mealCategory={"Soup"} />
-                            <Meal mealName={"Pohano"} mealCategory={"Meat"} />
-                            <Meal mealName={"Pomfrit"} mealCategory={"Side"} />
-                        </div>
-                      </Menu>
-                  </div>
-                  <div className={"row bg-secondary-subtle ps-2 pe-2"}>
-                      <Menu name={"Menu 2"}>
-                          <Meal mealName={"Juha od brokule"} mealCategory={"Soup"} />
-                          <Meal mealName={"Pljeskavice"} mealCategory={"Meat"} />
-                          <Meal mealName={"Pomfrit"} mealCategory={"Side"} />
-                      </Menu>
-                  </div>
-                  <div className={"row bg-secondary-subtle ps-2 pe-2 pb-2"}>
-                      <Menu name={"Vege menu"}>
-                          <Meal mealName={"Proljetna juha"} mealCategory={"Soup"} />
-                          <Meal mealName={"Medaljoni od soje"} mealCategory={"Vegetarian"} />
-                          <Meal mealName={"Pomfrit"} mealCategory={"Side"} />
-                      </Menu>
-                  </div>
-              </div>
-          </div>*/}
-          <div className={"d-flex row flex-row justify-content-center mx-5"}>
-                  <SubDailyMenu title={"Lunch"} className={"col"} menus={menus} meals={meals} />
-                  <SubDailyMenu title={"Dinner"} className={"col"} menus={menus} meals={meals} />
-          </div>
-      </Content>
+        <Content subtitle={"Menu"}>
+            <div className={"d-flex flex-column gap-3 mx-5"}>
+                <div className={"d-flex flex-column mx-5"}>
+                    <SubDailyMenu title={"Lunch"} menus={lunch} meals={meals} setDailyMenu={setDailyMenu} loading={loading}/>
+                    {console.log(lunch)}
+                    <SubDailyMenu title={"Dinner"} menus={dinner} meals={meals} setDailyMenu={setDailyMenu} loading={loading}/>
+                </div>
+            </div>
+
+        </Content>
     )
 };
 

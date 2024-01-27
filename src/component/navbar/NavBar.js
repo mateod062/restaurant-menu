@@ -1,71 +1,90 @@
-import {Link, Outlet} from "react-router-dom";
+import {Link, Navigate, Outlet, useLocation, useNavigate} from "react-router-dom";
 import "./NavBar.css"
+import {useContext, useEffect, useState} from "react";
+import useAuth from "../../hooks/useAuth";
+import {FaUtensils} from "react-icons/fa";
+import useAxiosPrivate from "../../api/axiosPrivate";
+import SpinnerModal from "../common/loading/SpinnerModal";
 
 const NavBar = () => {
+
+  const {auth, setAuth} = useAuth()
+  const axiosPrivate = useAxiosPrivate()
+
+  const location = useLocation()
+  const navigate = useNavigate()
+  const from = location.state?.from?.pathname || "/login"
+
+  const [loading, setLoading] = useState(false)
+
+  const handleLogout = async (event) => {
+    event.preventDefault()
+    setLoading(true)
+    try {
+      await axiosPrivate.post('auth/refresh', {}, {
+        headers: {
+          'Authorization': `Bearer ${auth.accessToken}`
+        }
+      });
+    } catch (refreshError) {
+      console.error('Failed to refresh auth:', refreshError);
+      sessionStorage.removeItem('auth');
+    }
+
+    setAuth({});
+    navigate(from, {replace: true})
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    console.log(auth?.username)
+  }, []);
+
   return (
       <>
-        <nav className={"navbar bg-black"}>
-          <Link to={"/"} className={"fs-1 ps-4 pb-3 text-decoration-none title col"}>Restaurant Mini</Link>
-          <div>
-          <ul className={"navigation-menu list-group list-group-horizontal pe-1"}>
-            <li>
-              <Link to="/">Menu</Link>
-            </li>
-            <li>
-              <Link to="/meals">Meals</Link>
-            </li>
-            <li>
-              <Link to="/employees">Employees</Link>
-            </li>
-            <li>
-              <Link to="/info">Info</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-          </ul>
-          </div>
-        </nav>
-
-        <Outlet/>
-      </>
-  )
-};
-
-export default NavBar;
-
-/*import {Link, Outlet} from "react-router-dom";
-import "./NavBar.css"
-
-const NavBar = () => {
-  return (
-      <>
-        <nav className={"navigation"}>
-          <Link to={"/"} className={"title"}>Restaurant Mini</Link>
-          <div className={"navigation-menu"}>
-            <ul>
-              <li>
-                <Link to="/">Menu</Link>
+        <nav className={"navbar navbar-expand-lg fixed-top bg-black"}>
+          <div className={"container-fluid"}>
+            <div className={"d-flex flex-row gap-2 ms-3"}>
+              <FaUtensils className={"navbar-nav text-white my-auto"} />
+              <Link to={"/"} className={"navbar-brand text-white fw-bold"}>Restaurant Mini</Link>
+            </div>
+            <ul className="navbar-nav ms-auto me-2 mb-2 mb-lg-0">
+              <li className="nav-item">
+                <Link className={"nav-link"} to="/">Menu</Link>
               </li>
-              <li>
-                <Link to="/meals">Meals</Link>
+              <li className="nav-item">
+                <Link className={"nav-link"} to="/meals">Meals</Link>
               </li>
-              <li>
-                <Link to="/employees">Employees</Link>
+              <li className="nav-item">
+                <Link className={"nav-link"} to="/employees">Employees</Link>
               </li>
-              <li>
-                <Link to="/info">Info</Link>
+              <li className="nav-item">
+                <Link className={"nav-link"} to="/info">Info</Link>
               </li>
-              <li>
-                <Link to="/login">Login</Link>
+              <li className="nav-item">
+                {auth?.accessToken
+                    ? <button className={"nav-link"} onClick={handleLogout}>Logout</button>
+                    : <Link className={"nav-link"} to="/login">Login</Link>
+                }
+              </li>
+              <li className={"nav-item"}>
+                {auth?.accessToken
+                    ? <div className={"d-flex flex-row gap-1 mt-2 ms-3"}>
+                      <i className={"bi bi-person-fill"}></i>
+                      <span className={""}>{auth?.firstName}</span>
+                    </div>
+                    : null
+                }
               </li>
             </ul>
           </div>
         </nav>
 
-        <Outlet />
+        <Outlet/>
+
+        <SpinnerModal show={loading} />
       </>
   )
 };
 
-export default NavBar;*/
+export default NavBar;
