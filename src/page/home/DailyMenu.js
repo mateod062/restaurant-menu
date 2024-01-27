@@ -10,6 +10,7 @@ import meals from "../meals/Meals";
 const DailyMenu = () => {
 
     const {auth} = useAuth();
+    const [meals, setMeals] = useState([])
     const [dailyMenu, setDailyMenu] = useState([]);
     const [lunch, setLunch] = useState([]);
     const [dinner, setDinner] = useState([]);
@@ -17,20 +18,23 @@ const DailyMenu = () => {
 
     useEffect(() => {
 
-        const getDailyMenu = async () => {
+        const fetchItems = async () => {
             setLoading(true)
             try {
-                const response = await axios.get('/daily-menus')
-                console.log(response?.data)
-                setDailyMenu(response?.data)
-            } catch (e) {
-                console.error(e)
+                const getMenusResponse = await axios.get('/daily-menus')
+                const getMealsResponse = await axios.get('/meals')
+                console.log(getMenusResponse?.data)
+                console.log(getMealsResponse?.data)
+                setMeals(getMealsResponse?.data)
+                setDailyMenu(getMenusResponse?.data)
+            }
+            catch (error) {
+                console.log(error)
             }
             setLoading(false)
         }
 
-
-        getDailyMenu()
+        fetchItems()
 
     }, [])
 
@@ -55,9 +59,9 @@ const DailyMenu = () => {
         <Content subtitle={"Menu"}>
             <div className={"d-flex flex-column gap-3 mx-5"}>
                 <div className={"d-flex flex-column mx-5"}>
-                    <SubDailyMenu title={"Lunch"} menus={lunch} setDailyMenu={setDailyMenu} loading={loading}/>
+                    <SubDailyMenu title={"Lunch"} menus={lunch} meals={meals} setDailyMenu={setDailyMenu} loading={loading}/>
                     {console.log(lunch)}
-                    <SubDailyMenu title={"Dinner"} menus={dinner} setDailyMenu={setDailyMenu} loading={loading}/>
+                    <SubDailyMenu title={"Dinner"} menus={dinner} meals={meals} setDailyMenu={setDailyMenu} loading={loading}/>
                 </div>
             </div>
 

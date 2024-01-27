@@ -6,12 +6,11 @@ import axios from "../../../api/axios";
 import ErrorModal from "../error/ErrorModal";
 import SpinnerModal from "../loading/SpinnerModal";
 
-const Menu = ({dailyMenuTitle, dailyMenu, menu, setDailyMenu, bottomLine = true}) => {
+const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) => {
     const {auth} = useAuth()
 
     const editMenuFormRef = useRef()
 
-    const [meals, setMeals] = useState([])
     const [soups, setSoups] = useState([])
     const [mainMeals, setMainMeals] = useState([])
     const [sideDishes, setSideDishes] = useState([])
@@ -39,6 +38,7 @@ const Menu = ({dailyMenuTitle, dailyMenu, menu, setDailyMenu, bottomLine = true}
         }
         console.log(JSON.stringify(newMenu));
 
+        setLoading(true)
         try {
             const responsePatchMenu = await axios.patch(`/menus/${menu.id}`, newMenu)
             console.log(responsePatchMenu.data)
@@ -55,25 +55,8 @@ const Menu = ({dailyMenuTitle, dailyMenu, menu, setDailyMenu, bottomLine = true}
             console.log(error)
             setErrorMessage("An error occurred")
         }
-    }
-
-    useEffect(() => {
-        setLoading(true)
-        try {
-            const getMeals = async () => {
-                const response = await axios.get('/meals')
-                setMeals(response.data)
-            }
-
-            getMeals()
-        }
-        catch (error) {
-            console.error(error)
-            setErrorMessage("An error occurred")
-            setShowErrorModal(true)
-        }
         setLoading(false)
-    }, [])
+    }
 
     useEffect(() => {
         setSoups(meals.filter(meal => meal.category === "Soup"))
@@ -190,7 +173,12 @@ const Menu = ({dailyMenuTitle, dailyMenu, menu, setDailyMenu, bottomLine = true}
                         Close
                     </Button>
                     <Button variant={"primary"} onClick={handleEditMenu}>
-                        Save
+                        {loading ? (
+                            <Spinner animation="border" role="status" size={"sm"}>
+                                <span className="visually-hidden">Loading...</span>
+                            </Spinner>
+                        ) : "Save"
+                        }
                     </Button>
                 </Modal.Footer>
             </Modal>

@@ -13,11 +13,13 @@ import {
     FormCheck,
     Alert,
     Table,
-    ModalHeader, Placeholder, Spinner
+    ModalHeader, Placeholder, Spinner, PlaceholderButton
 } from "react-bootstrap";
 import "./Meals.css"
 import ErrorModal from "../../component/common/error/ErrorModal";
 const Meals = () => {
+    const localStorage = window.localStorage
+
     const {auth} = useAuth()
 
     const addMealFormRef = useRef()
@@ -32,7 +34,7 @@ const Meals = () => {
     const [addMealFormValidated, setAddMealFormValidated] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
     const [showErrorModal, setShowErrorModal] = useState(false)
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
 
     const handleAddMeal = async (event) => {
         event.preventDefault();
@@ -73,23 +75,31 @@ const Meals = () => {
             setErrorMessage("An error occurred.")
         }
         setLoading(false)
+
+        localStorage.removeItem('meals')
     }
 
     useEffect(() => {
-        const getMeals = async () => {
-            setLoading(true)
-            try {
-                const response = await axios.get('/meals')
-                console.log(response.data)
-                setMeals(response.data)
-            } catch (e) {
-                console.error(e)
-            }
-            setLoading(false)
+        const storedMeals = JSON.parse(localStorage.getItem('meals'))
+        if (storedMeals) {
+            setMeals(storedMeals)
         }
+        else {
+            const getMeals = async () => {
+                setLoading(true)
+                try {
+                    const response = await axios.get('/meals')
+                    console.log(response.data)
+                    setMeals(response.data)
+                    localStorage.setItem('meals', JSON.stringify(response.data));
+                } catch (e) {
+                    console.error(e)
+                }
+                setLoading(false)
+            }
 
-        getMeals()
-
+            getMeals()
+        }
     }, [])
 
     useEffect(() => {
@@ -113,14 +123,19 @@ const Meals = () => {
                         <th scope={"col"}>
                             <div className={"d-flex flex-row gap-5"}>
                                 Cijena jela
-                                <button
-                                    type={"button"}
-                                    className={auth?.accessToken ? "btn btn-primary ms-auto" : "invisible"}
-                                    onClick={() => setShowModal(true)}
-                                >
-                                    <i className={"bi bi-plus-square"}></i>
-                                    <span className={"ms-2"}>Add meal</span>
-                                </button>
+                                {loading && auth?.accessToken && (
+                                    <PlaceholderButton variant={"primary"} xs={3} className={"ms-auto"} />
+                                )}
+                                {!loading && auth?.accessToken && (
+                                    <Button
+                                        variant={"primary"}
+                                        className={auth?.accessToken ? "ms-auto" : "invisible"}
+                                        onClick={() => setShowModal(true)}
+                                    >
+                                        <i className={"bi bi-plus-square"}></i>
+                                        <span className={"ms-2"}>Add meal</span>
+                                    </Button>
+                                )}
                             </div>
                         </th>
                     </tr>

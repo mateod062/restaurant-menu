@@ -5,19 +5,21 @@ import {useLocation, useNavigate} from "react-router-dom";
 import AuthContext from "../../context/AuthProvider";
 import useAuth from "../../hooks/useAuth";
 import SpinnerModal from "../../component/common/loading/SpinnerModal";
+import {Button, Card, Form, FormControl, FormGroup, FormLabel, InputGroup} from "react-bootstrap";
+import ErrorModal from "../../component/common/error/ErrorModal";
 
 const Login = () => {
 
     const {setAuth} = useAuth()
 
     const emailRef = useRef()
-    const errorRef = useRef()
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("")
     const [loading, setLoading] = useState(false)
+    const [showErrorModal, setShowErrorModal] = useState(false)
 
     const navigate = useNavigate()
     const location = useLocation()
@@ -90,15 +92,16 @@ const Login = () => {
 
             navigate(from, {replace: true})
         } catch (e) {
-            if (!e?.originalStatus) {
+            if (!e?.response?.status) {
                 setErrorMessage("No server response")
             }
-            else if (e.originalStatus === 401) {
+            else if (e?.response?.status === 401) {
                 setErrorMessage("Incorrect email or password")
             }
             else {
                 setErrorMessage("Login Failed")
             }
+            setShowErrorModal(true)
         }
 
         setLoading(false)
@@ -107,57 +110,51 @@ const Login = () => {
     return (
         <>
             <Content subtitle={"Login"}>
-                <form onSubmit={handleSubmit}>
-                    <div className={"w-50 d-flex flex-column justify-content-start mx-5 mt-5"}>
-                        <div className="form-group">
-                            <label htmlFor="inputEmail">Email address</label>
-                            <input
-                                type="email"
-                                className="form-control"
-                                onChange={handleEmailChange}
-                                ref={emailRef}
-                                id={"inputEmail"}
-                                aria-describedby="emailHelp"
-                                placeholder="Enter email"
-                                required
-                            />
-                        </div>
-                        <div className="form-group mt-3">
-                            <label htmlFor="inputPassowrd">Password</label>
-                            <div className={"form-group row"}>
-                                <div className={"col"}>
-                                    <input
+                <Card bg={"secondary"} className={"w-50 mx-5 my-5"}>
+                    <Card.Body>
+                        <Form onSubmit={handleSubmit}>
+                            <FormGroup className={"mb-3"} controlId={"email"}>
+                                <FormLabel>
+                                    Email address
+                                </FormLabel>
+                                <FormControl
+                                    type={"email"}
+                                    placeholder={"Enter email"}
+                                    onChange={handleEmailChange}
+                                    ref={emailRef}
+                                    required
+                                />
+                            </FormGroup>
+                            <FormGroup className={"mb-3"} controlId={"password"}>
+                                <FormLabel>
+                                    Password
+                                </FormLabel>
+                                <InputGroup>
+                                    <FormControl
                                         type={passwordVisible ? "text" : "password"}
-                                        className="form-control"
+                                        placeholder={"Enter password"}
                                         onChange={handlePasswordChange}
-                                        id="inputPassword"
-                                        placeholder="Password"
                                         required
                                     />
-                                </div>
-                                <div className={"col-auto"}>
-                                    <button
-                                        type={"button"}
-                                        className={"btn btn-primary ml-5"}
-                                        onClick={() => setPasswordVisible(!passwordVisible)}>
+                                    <Button variant={"primary"} onClick={() => setPasswordVisible(!passwordVisible)}>
                                         {passwordVisible
                                             ? <i className={"bi bi-eye"}/>
                                             : <i className={"bi bi-eye-slash"}/>}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="submit" className="btn btn-primary mt-3">Login</button>
-                        <div className={errorMessage ? "text-danger" : "d-none"}>
-                            <p ref={errorRef} aria-live={"assertive"}>
-                                {errorMessage}
-                            </p>
-                        </div>
-                    </div>
-                </form>
+
+                                    </Button>
+                                </InputGroup>
+                            </FormGroup>
+                            <Button variant={"primary"} type={"submit"}>
+                                Login
+                            </Button>
+                        </Form>
+                    </Card.Body>
+                </Card>
             </Content>
 
             <SpinnerModal show={loading} />
+
+            <ErrorModal show={showErrorModal} onHide={() => setShowErrorModal(false)} message={errorMessage} />
         </>
     )
 };

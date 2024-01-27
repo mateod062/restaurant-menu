@@ -1,6 +1,16 @@
 import useAuth from "../../../hooks/useAuth";
 import {useRef, useState} from "react";
-import {Alert, Button, FloatingLabel, Form, InputGroup, Modal, ModalHeader, Spinner} from "react-bootstrap";
+import {
+    Alert,
+    Button,
+    FloatingLabel,
+    Form,
+    InputGroup,
+    Modal,
+    ModalHeader,
+    Placeholder, PlaceholderButton,
+    Spinner
+} from "react-bootstrap";
 import axios from "../../../api/axios";
 import ErrorModal from "../error/ErrorModal";
 import SpinnerModal from "../loading/SpinnerModal";
@@ -17,6 +27,7 @@ const MealCategory = ({category, meals, setMeals, loading}) => {
     const [editMealFormValidated, setEditMealFormValidated] = useState(false)
     const [editMealErrorMessage, setEditMealErrorMessage] = useState("")
     const [mealToEdit, setMealToEdit] = useState({name: "", category: "", price: ""})
+    const [mealToDeleteId, setMealToDeleteId] = useState(null)
 
     const handleEditMeal = async (event) => {
         event.preventDefault();
@@ -79,6 +90,9 @@ const MealCategory = ({category, meals, setMeals, loading}) => {
             }
             setShowErrorModal(true)
         }
+
+        setMealToDeleteId(null)
+        localStorage.removeItem('meals')
     }
 
     return (
@@ -87,13 +101,28 @@ const MealCategory = ({category, meals, setMeals, loading}) => {
                 <tr className={"table-secondary"}>
                     <th scope={"col"} colSpan={2}>{category}</th>
                 </tr>
-                {loading ? (
-                        <tr className={"table-secondary border"}>
-                            <td>
-                                <Spinner animation={"border"} role={"status"} />
-                            </td>
-                        </tr>
-                    )
+                {loading ? Array.from({length: 5}).map((_, index) => (
+                        <>
+                            <tr className={"table-secondary border"}>
+                                <td>
+                                    <Placeholder animation={"glow"}>
+                                        <Placeholder xs={5} size={"lg"} />
+                                    </Placeholder>
+                                </td>
+                                <td>
+                                    <Placeholder animation={"glow"}>
+                                        <Placeholder xs={1} size={"lg"} />
+                                    </Placeholder>
+                                    {auth?.accessToken &&
+                                        <PlaceholderButton variant={"primary"} xs={1} className={"ms-3"}/>
+                                    }
+                                    {auth?.accessToken &&
+                                        <PlaceholderButton variant={"danger"} xs={1} className={"ms-3"}/>
+                                    }
+                                </td>
+                            </tr>
+                        </>
+                    ))
                     : (meals.map((meal, index) =>
                         <tr key={index} className={"table-secondary border"}>
                             <td>{meal.name}</td>
@@ -115,10 +144,11 @@ const MealCategory = ({category, meals, setMeals, loading}) => {
                                         <Button variant={"danger"}
                                                 onClick={() => {
                                                     console.log(meal)
+                                                    setMealToDeleteId(meal.id)
                                                     handleDeleteMeal(meal.id)
                                                 }}
                                         >
-                                            {buttonLoading ? (
+                                            {buttonLoading && meal.id === mealToDeleteId ? (
                                                 <Spinner animation="border" role="status" size={"sm"}>
                                                     <span className="visually-hidden">Loading...</span>
                                                 </Spinner>
