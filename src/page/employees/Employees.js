@@ -1,5 +1,6 @@
 import Content from "../../component/common/content/Content";
 import "./Employees.css"
+import "../../component/common/meal/Border.css"
 import {useEffect, useRef, useState} from "react";
 import axios from "../../api/axios";
 import {
@@ -153,10 +154,10 @@ export default function Employees() {
     return (
         <>
             <Content subtitle={"Employees"}>
-                <div className={"container rounded-3 border border-5 border-darkblue bg-secondary-subtle w-50 mx-auto my-5"}>
-                    <table className={"table"}>
+                <div className={"container rounded-3 border border-3 bg-black w-50 mx-auto pt-3 my-4"}>
+                    <table className={"table table-dark"}>
                         <thead>
-                            <tr className={"table-secondary border-bottom border-black"}>
+                            <tr className={"border-bottom bottom2 fs-3"}>
                                 <th scope={"col"}>First name</th>
                                 <th scope={"col"}>Last name</th>
                                 <th scope={"col"}>Role</th>
@@ -197,7 +198,7 @@ export default function Employees() {
                             employees?.length
                                 ? employees.map((employee, index) => {
                                     return (
-                                        <tr key={index} className={"table-secondary border-bottom border-black"}>
+                                        <tr key={index} className={"border-bottom bottom fs-5"}>
                                             <td>{employee.name}</td>
                                             <td>{employee.last_name}</td>
                                             <td>
@@ -217,7 +218,7 @@ export default function Employees() {
                                     )
                                 })
                                 :
-                                <tr className={"table-secondary border-bottom border-black"}>
+                                <tr className={"border-bottom bottom fs-5"}>
                                     <td colSpan={3} align={"center"}>No employees</td>
                                 </tr>
                             )

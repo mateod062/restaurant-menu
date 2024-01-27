@@ -42,11 +42,11 @@ const NavBar = () => {
 
   return (
       <>
-        <nav className={"navbar navbar-expand-lg fixed-top bg-primary"}>
+        <nav className={"navbar navbar-expand-lg fixed-top bg-black"}>
           <div className={"container-fluid"}>
             <div className={"d-flex flex-row gap-2 ms-3"}>
               <FaUtensils className={"navbar-nav text-white my-auto"} />
-              <Link to={"/"} className={"navbar-brand text-white fw-bold"}>Restaurant Mini kod tete Ivke</Link>
+              <Link to={"/"} className={"navbar-brand text-white fw-bold"}>Restaurant Mini</Link>
             </div>
             <ul className="navbar-nav ms-auto me-2 mb-2 mb-lg-0">
               <li className="nav-item">
@@ -77,7 +77,6 @@ const NavBar = () => {
                 }
               </li>
             </ul>
-
           </div>
         </nav>
 

@@ -7,8 +7,8 @@ import Mini_terasa from "./Mini_terasa.jpg"
 const Info = () => {
     return (
         <Content subtitle={"Info"}>
-            <div className={"mx-5 row fw-semibold"}>
-                <div className={"col"}>
+            <div className={"mx-5 row fw-semibold mt-5"}>
+                <div className={"col text-white"}>
                     <p className={"fs-3"}>Uz nekoliko vrsti meni obroka, gotovih jela i jela s roštilja, studentima su ovdje u ponudi i pizze.</p>
                     <ul className={"ms-5 fs-4"}>
                         <li>Broj sjedećih mjesta: 109 + terasa</li>

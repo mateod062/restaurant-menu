@@ -5,6 +5,7 @@ import Meal from "./Meal";
 import axios from "../../../api/axios";
 import ErrorModal from "../error/ErrorModal";
 import SpinnerModal from "../loading/SpinnerModal";
+import "./Border.css"
 
 const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) => {
     const {auth} = useAuth()
@@ -68,7 +69,7 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
     return (
         <>
             <div className={bottomLine
-                ? "container border-bottom border-2 border-black p-2"
+                ? "container border-bottom border-3 bottom p-2"
                 : "container p-2"
             }>
                 <div className={"row"}>
@@ -90,11 +91,11 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
                                         <i className={"bi bi-pencil-square"}></i>
                                         <span className={"ms-2"}>Edit</span>
                                     </button>
-                                </div>
+                                  </div>
                                 : null
 
                         }
-                    </div>
+                      </div>
                     <div className={"col"}>
                         {menu && menu.soup && <Meal mealName={menu.soup} mealCategory={"Soup"} />}
                         {menu && menu.main_meal && <Meal mealName={menu.main_meal} mealCategory={"Main meal"} />}

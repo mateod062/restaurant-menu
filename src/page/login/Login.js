@@ -7,6 +7,7 @@ import useAuth from "../../hooks/useAuth";
 import SpinnerModal from "../../component/common/loading/SpinnerModal";
 import {Button, Card, Form, FormControl, FormGroup, FormLabel, InputGroup} from "react-bootstrap";
 import ErrorModal from "../../component/common/error/ErrorModal";
+import "./Login.css"
 
 const Login = () => {
 
@@ -114,11 +115,12 @@ const Login = () => {
                     <Card.Body>
                         <Form onSubmit={handleSubmit}>
                             <FormGroup className={"mb-3"} controlId={"email"}>
-                                <FormLabel>
+                                <FormLabel className={"fs-3 boja"}>
                                     Email address
                                 </FormLabel>
                                 <FormControl
                                     type={"email"}
+                                    className={"form-control boja2 border border-2"}
                                     placeholder={"Enter email"}
                                     onChange={handleEmailChange}
                                     ref={emailRef}
@@ -126,25 +128,26 @@ const Login = () => {
                                 />
                             </FormGroup>
                             <FormGroup className={"mb-3"} controlId={"password"}>
-                                <FormLabel>
+                                <FormLabel className={"fs-3 boja"}>
                                     Password
                                 </FormLabel>
                                 <InputGroup>
                                     <FormControl
                                         type={passwordVisible ? "text" : "password"}
+                                        className={"form-control boja2 border border-2"}
                                         placeholder={"Enter password"}
                                         onChange={handlePasswordChange}
                                         required
                                     />
-                                    <Button variant={"primary"} onClick={() => setPasswordVisible(!passwordVisible)}>
+                                    <Button variant={"primary"} className={"botun border-2 ml-5"} onClick={() => setPasswordVisible(!passwordVisible)}>
                                         {passwordVisible
-                                            ? <i className={"bi bi-eye"}/>
-                                            : <i className={"bi bi-eye-slash"}/>}
+                                            ? <i className={"bi bi-eye boja3"}/>
+                                            : <i className={"bi bi-eye-slash boja3"}/>}
 
                                     </Button>
                                 </InputGroup>
                             </FormGroup>
-                            <Button variant={"primary"} type={"submit"}>
+                            <Button variant={"primary"} className={"botun border-2 text-black fw-bolder fs-4 mt-3 py-0"} type={"submit"}>
                                 Login
                             </Button>
                         </Form>

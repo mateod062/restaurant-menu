@@ -98,12 +98,12 @@ const MealCategory = ({category, meals, setMeals, loading}) => {
     return (
         <>
             <tbody>
-                <tr className={"table-secondary"}>
+                <tr className={"border-bottom bottom text-white fs-4"}>
                     <th scope={"col"} colSpan={2}>{category}</th>
                 </tr>
                 {loading ? Array.from({length: 5}).map((_, index) => (
                         <>
-                            <tr className={"table-secondary border"}>
+                            <tr className={"fs-4"}>
                                 <td>
                                     <Placeholder animation={"glow"}>
                                         <Placeholder xs={5} size={"lg"} />
@@ -124,7 +124,7 @@ const MealCategory = ({category, meals, setMeals, loading}) => {
                         </>
                     ))
                     : (meals.map((meal, index) =>
-                        <tr key={index} className={"table-secondary border"}>
+                        <tr key={index} className={"fs-5"}>
                             <td>{meal.name}</td>
                             <td>
                                 <div className={"d-flex flex-row gap-3"}>

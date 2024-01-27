@@ -16,7 +16,9 @@ import {
     ModalHeader, Placeholder, Spinner, PlaceholderButton
 } from "react-bootstrap";
 import "./Meals.css"
+import "../../component/common/meal/Border.css"
 import ErrorModal from "../../component/common/error/ErrorModal";
+
 const Meals = () => {
     const localStorage = window.localStorage
 
@@ -114,11 +116,10 @@ const Meals = () => {
 
     return (
         <Content subtitle={"Meals"}>
-            <div
-                className={"container rounded-3 border border-5 border-darkblue bg-secondary-subtle w-50 mx-auto my-5"}>
-                <Table>
+            <div className={"container rounded border border-3 bg-black w-50 mx-auto pt-3 my-4 fs-3"}>
+                <Table variant={"dark"}>
                     <thead className={"bg-darkblue"}>
-                    <tr className={"table-secondary border"}>
+                      <tr className={"border-bottom bottom"}>
                         <th scope={"col"}>Naziv jela</th>
                         <th scope={"col"}>
                             <div className={"d-flex flex-row gap-5"}>
@@ -138,7 +139,7 @@ const Meals = () => {
                                 )}
                             </div>
                         </th>
-                    </tr>
+                      </tr>
                     </thead>
                     <MealCategory category={"Pizze"} meals={pizzas} setMeals={setMeals} loading={loading}/>
                     <MealCategory category={"Juhe"} meals={soups} setMeals={setMeals} loading={loading}/>

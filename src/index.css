@@ -1,4 +1,5 @@
 body {
+  background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url("./page/info/Mini.jpg");
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
