@@ -24,7 +24,6 @@ const DailyMenu = () => {
                 const getMenusResponse = await axios.get('/daily-menus')
                 const getMealsResponse = await axios.get('/meals')
                 console.log(getMenusResponse?.data)
-                console.log(getMealsResponse?.data)
                 setMeals(getMealsResponse?.data)
                 setDailyMenu(getMenusResponse?.data)
             }
