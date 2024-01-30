@@ -59,15 +59,11 @@ const Meals = () => {
         try {
             const responsePostMeal = await axios.post('/meals', newMeal)
             console.log(responsePostMeal.data)
-            setMeals(prevMeals => {
-                const mealToAdd = {
-                    id: responsePostMeal.data.id,
-                    name: responsePostMeal.data.name,
-                    category: responsePostMeal.data.category,
-                    price: responsePostMeal.data.price
-                }
-                return [...prevMeals, mealToAdd]
-            })
+            const responseGetMeals = await axios.get('/meals')
+            console.log(responseGetMeals.data)
+
+            setMeals(responseGetMeals?.data)
+            localStorage.setItem('meals', JSON.stringify(responseGetMeals.data));
 
             setAddMealFormValidated(false)
             setShowModal(false);
@@ -141,11 +137,11 @@ const Meals = () => {
                         </th>
                       </tr>
                     </thead>
-                    <MealCategory category={"Pizze"} meals={pizzas} setMeals={setMeals} loading={loading}/>
-                    <MealCategory category={"Juhe"} meals={soups} setMeals={setMeals} loading={loading}/>
-                    <MealCategory category={"Glavna jela"} meals={mainMeals} setMeals={setMeals} loading={loading}/>
-                    <MealCategory category={"Prilozi"} meals={sideDishes} setMeals={setMeals} loading={loading}/>
-                    <MealCategory category={"Deserti"} meals={desserts} setMeals={setMeals} loading={loading}/>
+                    <MealCategory category={"Pizzas"} meals={pizzas} setMeals={setMeals} loading={loading}/>
+                    <MealCategory category={"Soups"} meals={soups} setMeals={setMeals} loading={loading}/>
+                    <MealCategory category={"Main meals"} meals={mainMeals} setMeals={setMeals} loading={loading}/>
+                    <MealCategory category={"Side dishes"} meals={sideDishes} setMeals={setMeals} loading={loading}/>
+                    <MealCategory category={"Desserts"} meals={desserts} setMeals={setMeals} loading={loading}/>
                 </Table>
             </div>
 

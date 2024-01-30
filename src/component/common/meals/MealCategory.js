@@ -14,6 +14,9 @@ import {
 import axios from "../../../api/axios";
 import ErrorModal from "../error/ErrorModal";
 import SpinnerModal from "../loading/SpinnerModal";
+import {LuCakeSlice, LuSoup} from "react-icons/lu";
+import {GiHotMeal, GiMeal} from "react-icons/gi";
+import {FaPizzaSlice} from "react-icons/fa";
 
 const MealCategory = ({category, meals, setMeals, loading}) => {
     const {auth} = useAuth()
@@ -95,11 +98,23 @@ const MealCategory = ({category, meals, setMeals, loading}) => {
         localStorage.removeItem('meals')
     }
 
+    const icon = () => {
+        switch (category) {
+            case "Pizzas": return <FaPizzaSlice/>
+            case "Soups": return <LuSoup/>
+            case "Main meals": return <GiHotMeal/>
+            case "Side dishes": return <GiMeal/>
+            case "Desserts": return <LuCakeSlice/>
+            default:
+        }
+    }
+
     return (
         <>
             <tbody>
                 <tr className={"border-bottom bottom text-white fs-4"}>
-                    <th scope={"col"} colSpan={2}>{category}</th>
+                    <th scope={"col"}>{category}</th>
+                    <th scope={"col"} colSpan={2}>{icon()}</th>
                 </tr>
                 {loading ? Array.from({length: 5}).map((_, index) => (
                         <>
