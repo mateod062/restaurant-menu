@@ -14,7 +14,7 @@ const DailyMenu = () => {
     const [dailyMenu, setDailyMenu] = useState([]);
     const [lunch, setLunch] = useState([]);
     const [dinner, setDinner] = useState([]);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
 

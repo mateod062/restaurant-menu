@@ -72,7 +72,9 @@ const Meals = () => {
             console.log(error)
             setErrorMessage("An error occurred.")
         }
+/*
         setLoading(false)
+*/
 
         localStorage.removeItem('meals')
     }
@@ -121,7 +123,7 @@ const Meals = () => {
                             <div className={"d-flex flex-row gap-5"}>
                                 Cijena jela
                                 {loading && auth?.accessToken && (
-                                    <PlaceholderButton variant={"primary"} xs={3} className={"ms-auto"} />
+                                    <PlaceholderButton xs={3} className={"background ms-auto"} />
                                 )}
                                 {!loading && auth?.accessToken && (
                                     <Button
