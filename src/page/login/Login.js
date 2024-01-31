@@ -111,7 +111,7 @@ const Login = () => {
     return (
         <>
             <Content subtitle={"Login"}>
-                <Card bg={"secondary"} className={"w-50 mx-5 my-5"}>
+                <Card className={"container pb-3 w-50 bg-white bg-opacity-10"}>
                     <Card.Body>
                         <Form onSubmit={handleSubmit}>
                             <FormGroup className={"mb-3"} controlId={"email"}>
@@ -147,7 +147,7 @@ const Login = () => {
                                     </Button>
                                 </InputGroup>
                             </FormGroup>
-                            <Button variant={"primary"} className={"botun border-2 text-black fw-bolder fs-4 mt-3 py-0"} type={"submit"}>
+                            <Button variant={"primary"} className={"botun border-2 text-black fw-bolder fs-4 mt-3 py-0 w-100"} type={"submit"}>
                                 Login
                             </Button>
                         </Form>

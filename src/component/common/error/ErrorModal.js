@@ -2,17 +2,17 @@ import {Alert, Button, Modal, ModalHeader} from "react-bootstrap";
 
 const ErrorModal = ({ show, onHide, message }) => {
     return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header className={"bg-danger text-white"} closeButton>
-                <Modal.Title>Error</Modal.Title>
+        <Modal className={" align-items-center"} show={show} onHide={onHide}>
+            <Modal.Header className={"fs-5 bg-danger text-white"} closeButton>
+                <Modal.Title className={"fs-3"}>Error</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Alert variant={"danger"}>
+                <Alert className={"fs-5"} variant={"danger"}>
                     {message}
                 </Alert>
             </Modal.Body>
-            <Modal.Footer>
-                <Button variant={"secondary"} onClick={onHide}>
+            <Modal.Footer className={"border-top-0"}>
+                <Button className={"fs-5 bg-black fw-semibold"} variant={"secondary"} onClick={onHide}>
                     Ok
                 </Button>
             </Modal.Footer>

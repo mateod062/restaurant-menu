@@ -19,6 +19,7 @@ import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../api/axiosPrivate";
 import ErrorModal from "../../component/common/error/ErrorModal";
 import SpinnerModal from "../../component/common/loading/SpinnerModal";
+import "../../component/common/meal/Botun.css"
 
 export default function Employees() {
 
@@ -154,7 +155,7 @@ export default function Employees() {
     return (
         <>
             <Content subtitle={"Employees"}>
-                <div className={"container rounded-3 border border-3 bg-black w-50 mx-auto pt-3 my-4"}>
+                <div className={"container rounded-3 border border-3 bg-black w-50 mx-auto mb-5 pt-3"}>
                     <table className={"table table-dark"}>
                         <thead>
                             <tr className={"border-bottom bottom2 fs-3"}>
@@ -199,16 +200,16 @@ export default function Employees() {
                                 ? employees.map((employee, index) => {
                                     return (
                                         <tr key={index} className={"border-bottom bottom fs-5"}>
-                                            <td>{employee.name}</td>
-                                            <td>{employee.last_name}</td>
-                                            <td>
+                                            <td className={"fs-5"}>{employee.name}</td>
+                                            <td className={"fs-5"}>{employee.last_name}</td>
+                                            <td className={"fs-5"}>
                                                 <div className={"d-flex flex-row gap-2"}>
                                                     {employee.is_admin ? 'Admin' : 'Employee'}
                                                     {auth?.accessToken && auth?.isAdmin
                                                         ? <Button variant={"danger"} className={"ms-auto pt-0 px-2"} onClick={() => {
                                                             handleRemoveEmployee(employee)
                                                         }}>
-                                                            <HiUserRemove className={"text-white" } />
+                                                            <HiUserRemove className={"text-black fs-5" } />
                                                         </Button>
                                                         : null
                                                     }
@@ -230,11 +231,11 @@ export default function Employees() {
                                     <td colSpan={3} align={"left"}>
                                         {loading ? (
                                             <Placeholder.Button variant={"primary"} xs={3} />
-                                        ) : (<Button variant={"primary"} onClick={() => {
+                                        ) : (<Button variant={"primary"} className={"botun text-black fs-5 fw-bolder mt-3"} onClick={() => {
                                             setShowAddEmployeeModal(true)
                                         }}
                                         >
-                                            <HiUserAdd className={"text-white me-1 mb-1"}/>
+                                            <HiUserAdd className={"text-black me-1 mb-1"}/>
                                             Add employee
                                         </Button>)
                                         }
@@ -250,17 +251,18 @@ export default function Employees() {
 
             <ErrorModal show={showErrorModal} onHide={() => setShowErrorModal(false)} message={errorMessage} />
 
-            <Modal show={showAddEmployeeModal} onHide={() => setShowAddEmployeeModal(false)} backdrop={"static"}>
-                <ModalHeader className={"bg-primary text-white"} closeButton>
-                    <Modal.Title>
+            <Modal className={"d-flex align-items-center w-100"} show={showAddEmployeeModal} onHide={() => setShowAddEmployeeModal(false)} backdrop={"static"}>
+                <ModalHeader className={"background text-black fs-4 w-100"} closeButton>
+                    <Modal.Title className={"fs-4"}>
                         Register new employee
                     </Modal.Title>
                 </ModalHeader>
-                <ModalBody>
+                <ModalBody className={"boja2 fs-6 border-top-0"}>
                     <Form validated={addEmployeeFormValidated} ref={addEmployeeFormRef} onSubmit={handleAddEmployee}>
                         <FormGroup controlId={"firstName"}>
                             <FloatingLabel label={"First Name"} className={"mb-3"}>
                                 <Form.Control
+                                    className={"sirina fs-6"}
                                     name={"firstName"}
                                     placeholder={"First Name"}
                                     type={"text"}
@@ -274,6 +276,7 @@ export default function Employees() {
                         <FormGroup controlId={"lastName"}>
                             <FloatingLabel label={"Last Name"} className={"mb-3"}>
                                 <Form.Control
+                                    className={"sirina fs-6"}
                                     name={"lastName"}
                                     placeholder={"Last Name"}
                                     type={"text"}
@@ -287,6 +290,7 @@ export default function Employees() {
                         <FormGroup controlId={"email"}>
                             <FloatingLabel label={"Email"} className={"mb-3"}>
                                 <Form.Control
+                                    className={"sirina fs-6"}
                                     name={"email"}
                                     placeholder={"Email"}
                                     type={"email"}
@@ -301,6 +305,7 @@ export default function Employees() {
                         <FormGroup controlId={"password"}>
                             <FloatingLabel label={"Password"} className={"mb-3"}>
                                 <Form.Control
+                                    className={"sirina fs-6"}
                                     name={"password"}
                                     placeholder={"Password"}
                                     type={"password"}
@@ -314,6 +319,7 @@ export default function Employees() {
                         <FormGroup controlId={"confirmPassword"}>
                             <FloatingLabel label={"Confirm Password"} className={"mb-3"}>
                                 <Form.Control
+                                    className={"sirina fs-6"}
                                     name={"confirmPassword"}
                                     placeholder={"Password"}
                                     type={"password"}
@@ -333,14 +339,14 @@ export default function Employees() {
                         </FormGroup>
                     </Form>
                 </ModalBody>
-                <ModalFooter>
-                    <Button variant={"secondary"} onClick={() => {
+                <ModalFooter className={"boja2 border-top-0"}>
+                    <Button className={"fs-6 bg-black fw-semibold"} variant={"secondary"} onClick={() => {
                         setAddEmployeeFormValidated(false)
                         setShowAddEmployeeModal(false)
                     }}>
                         Close
                     </Button>
-                    <Button variant={"primary"} onClick={handleAddEmployee}>
+                    <Button className={"fs-6 botun text-black fw-semibold"} variant={"primary"} onClick={handleAddEmployee}>
                         {loading ? (
                             <Spinner animation="border" role="status" size={"sm"}>
                                 <span className="visually-hidden">Loading...</span>

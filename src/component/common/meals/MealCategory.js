@@ -98,12 +98,12 @@ const MealCategory = ({category, meals, setMeals, loading}) => {
     return (
         <>
             <tbody>
-                <tr className={"border-bottom bottom text-white fs-4"}>
-                    <th scope={"col"} colSpan={2}>{category}</th>
+                <tr className={"border-bottom bottom"}>
+                    <th scope={"col"} className={"fs-3"} colSpan={2}>{category}</th>
                 </tr>
                 {loading ? Array.from({length: 5}).map((_, index) => (
                         <>
-                            <tr className={"fs-4"}>
+                            <tr>
                                 <td>
                                     <Placeholder animation={"glow"}>
                                         <Placeholder xs={5} size={"lg"} />
@@ -124,19 +124,20 @@ const MealCategory = ({category, meals, setMeals, loading}) => {
                         </>
                     ))
                     : (meals.map((meal, index) =>
-                        <tr key={index} className={"fs-5"}>
-                            <td>{meal.name}</td>
-                            <td>
+                        <tr key={index}>
+                            <td className={"fs-5"}>{meal.name}</td>
+                            <td className={"fs-5"}>
                                 <div className={"d-flex flex-row gap-3"}>
                                     {meal.price}€
                                     {auth?.accessToken ? (
                                         <Button variant={"primary"}
+                                                className={"botun"}
                                                 onClick={() => {
                                                     setMealToEdit({...meal})
                                                     setShowEditMealModal(true)
                                                 }}
                                         >
-                                            <i className={"bi bi-pencil-square"}></i>
+                                            <i className={"bi bi-pencil-square text-black fs-5"}></i>
                                         </Button>
                                     ) : null
                                     }
@@ -153,7 +154,7 @@ const MealCategory = ({category, meals, setMeals, loading}) => {
                                                     <span className="visually-hidden">Loading...</span>
                                                 </Spinner>
                                             ) : (
-                                                <i className={"bi bi-trash3-fill"}></i>
+                                                <i className={"bi bi-trash3-fill text-black fs-5"}></i>
                                             )}
                                         </Button>
                                     ) : null
@@ -167,14 +168,14 @@ const MealCategory = ({category, meals, setMeals, loading}) => {
 
             <ErrorModal show={showErrorModal} onHide={() => setShowErrorModal(false)} message={errorMessage} />
 
-            <Modal show={showEditMealModal} onHide={() => {
+            <Modal className={"d-flex align-items-center w-100"} show={showEditMealModal} onHide={() => {
                 setMealToEdit({name: "", category: "", price: ""})
                 setShowEditMealModal(false)
             }} backdrop="static">
-                <Modal.Header className={"bg-primary text-white"} closeButton>
-                    <Modal.Title>Edit Meal</Modal.Title>
+                <Modal.Header className={"background text-black fs-4 w-100"} closeButton>
+                    <Modal.Title className={"fs-4"}>Edit Meal</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className={"boja2 fs-6 border-top-0"}>
                     <Form validated={editMealFormValidated} ref={editMealFormRef} onSubmit={handleEditMeal}>
                         <Form.Group className={"mb-3"} controlId={"mealName"}>
                             <FloatingLabel label={"Name"} className={"mb-3"}>
@@ -256,11 +257,11 @@ const MealCategory = ({category, meals, setMeals, loading}) => {
                         </Form.Group>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className={"boja2 border-top-0"}>
                     <Alert variant={"danger"} className={editMealErrorMessage ? "me-auto" : "invisible"}>
                         {editMealErrorMessage}
                     </Alert>
-                    <Button variant={"secondary"} onClick={() => {
+                    <Button className={"bg-black fs-6 fw-semibol"} variant={"secondary"} onClick={() => {
                             setShowEditMealModal(false)
                             setEditMealFormValidated(false)
                             setMealToEdit({name: "", category: "", price: ""})
@@ -269,7 +270,7 @@ const MealCategory = ({category, meals, setMeals, loading}) => {
                     >
                         Close
                     </Button>
-                    <Button variant={"primary"} onClick={handleEditMeal} className={buttonLoading ? "px-3 py-2" : ""}>
+                    <Button variant={"primary"} onClick={handleEditMeal} className={buttonLoading ? "px-3 py-2 " : "botun fs-6 text-black fw-semibold"}>
                         {buttonLoading
                             ? <Spinner animation={"border"} role={"status"} className={"text-white"} size={"sm"} />
                             : "Edit meal"

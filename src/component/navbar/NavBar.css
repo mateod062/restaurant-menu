@@ -1,21 +1,3 @@
-.title {
-    color: #DCB341;
-}
-
-.navigation-menu ul {
-    margin-top: 2rem;
-}
-
-.navigation-menu li {
-    list-style-type: none;
-    margin: 1rem;
-}
-
-
-.navigation-menu li a {
-    text-decoration: none;
-    display: block;
-    width: 100%;
-    color: #DCB341;
-    font-size: 1.3rem;
+.text {
+    color: #DCB341 !important;
 }

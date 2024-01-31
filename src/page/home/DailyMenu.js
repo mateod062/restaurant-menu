@@ -1,11 +1,9 @@
 import "../../component/common/content/Content"
 import Content from "../../component/common/content/Content";
-import "./DailyMenu.css";
 import SubDailyMenu from "../../component/common/meal/SubDailyMenu";
 import useAuth from "../../hooks/useAuth";
 import {useEffect, useState} from "react";
 import axios from "../../api/axios";
-import meals from "../meals/Meals";
 
 const DailyMenu = () => {
 
@@ -58,10 +56,14 @@ const DailyMenu = () => {
     return (
         <Content subtitle={"Menu"}>
             <div className={"d-flex flex-column gap-3 mx-5"}>
-                <div className={"d-flex flex-column mx-5"}>
-                    <SubDailyMenu title={"Lunch"} menus={lunch} meals={meals} setDailyMenu={setDailyMenu} loading={loading}/>
-                    {console.log(lunch)}
-                    <SubDailyMenu title={"Dinner"} menus={dinner} meals={meals} setDailyMenu={setDailyMenu} loading={loading}/>
+                <div className={"d-flex flex-column"}>
+                    <SubDailyMenu title={"Lunch"} menus={lunch} meals={meals} setDailyMenu={setDailyMenu}
+                                  loading={loading}/>
+                </div>
+                {console.log(lunch)}
+                <div className={"d-flex flex-column mt-4 mb-5"}>
+                    <SubDailyMenu title={"Dinner"} menus={dinner} meals={meals} setDailyMenu={setDailyMenu}
+                                  loading={loading}/>
                 </div>
             </div>
 

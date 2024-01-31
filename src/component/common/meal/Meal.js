@@ -6,7 +6,7 @@ const Meal = ({mealName, mealCategory}) => {
     const [category, setCategory] = useState(mealCategory);
 
     return (
-        <div className={"container border-bottom border-primary-subtle bottom p-1"}>
+        <div className={"container border-bottom border-primary-subtle bottom p-1 fs-5"}>
             {name}
         </div>
     );

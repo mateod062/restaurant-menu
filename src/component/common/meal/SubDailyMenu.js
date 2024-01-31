@@ -9,13 +9,13 @@ const SubDailyMenu = ({title, menus, meals, setDailyMenu, loading}) => {
     const {auth} = useAuth()
 
     return (
-        <Container className={"border rounded border-3 w-50 mx-2 my-4"}>
+        <Container className={"d-flex align-middle border rounded border-3 w-50"}>
             <Col>
                 <Row className={"background"}>
                     <h2 className={"text-black"}>{title}</h2>
                 </Row>
                 {loading ? Array.from({length: 3}).map((_, index) => (
-                    <Row className={"bg-secondary-subtle p-3"}>
+                    <Row className={"bg-white p-3"}>
                         <Container className={"border-bottom border-2 border-black p-2"}>
                             <Row>
                                 <Col>

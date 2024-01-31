@@ -7,22 +7,22 @@ import Mini_terasa from "./Mini_terasa.jpg"
 const Info = () => {
     return (
         <Content subtitle={"Info"}>
-            <div className={"mx-5 row fw-semibold mt-5"}>
+            <div className={"d-flex align-items-center mx-5 mb-5 row fw-semibold"}>
                 <div className={"col text-white"}>
-                    <p className={"fs-3"}>Uz nekoliko vrsti meni obroka, gotovih jela i jela s roštilja, studentima su ovdje u ponudi i pizze.</p>
-                    <ul className={"ms-5 fs-4"}>
+                    <p className={"row fs-3"}>Uz nekoliko vrsti meni obroka, gotovih jela i jela s roštilja, studentima su ovdje u ponudi i pizze.</p>
+                    <ul className={"row ms-5 fs-4"}>
                         <li>Broj sjedećih mjesta: 109 + terasa</li>
                         <li>Dnevni kapacitet obroka: 1000</li>
                     </ul>
                 </div>
                 <div className={"col"}>
                     <div className={"row"}>
-                        <img className={"col-5 img-fluid"} src={Mini_linija} alt={"Poslužna linija mini-a"}/>
-                        <img className={"col-5 img-fluid"} src={Mini} alt={"Prostor sa stolovima"}/>
+                        <img className={"col-6 img-fluid"} src={Mini_linija} alt={"Poslužna linija mini-a"}/>
+                        <img className={"col-6 img-fluid"} src={Mini} alt={"Prostor sa stolovima"}/>
                     </div>
                     <div className={"row"}>
-                        <img className={"col-5 mt-4 img-fluid"} src={Mini_terasa} alt={"Terasa mini-a"}/>
-                        <img className={"col-5 mt-4 img-fluid"} src={Mini_5} alt={"Prostor sa stolovima iz drugog kuta"}/>
+                        <img className={"col-6 mt-4 img-fluid"} src={Mini_terasa} alt={"Terasa mini-a"}/>
+                        <img className={"col-6 mt-4 img-fluid"} src={Mini_5} alt={"Prostor sa stolovima iz drugog kuta"}/>
                     </div>
                 </div>
             </div>
