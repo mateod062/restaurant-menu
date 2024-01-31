@@ -73,9 +73,7 @@ const Meals = () => {
             console.log(error)
             setErrorMessage("An error occurred.")
         }
-/*
         setLoading(false)
-*/
 
         localStorage.removeItem('meals')
     }

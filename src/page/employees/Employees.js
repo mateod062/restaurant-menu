@@ -18,7 +18,6 @@ import {HiUserAdd, HiUserRemove} from "react-icons/hi";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../api/axiosPrivate";
 import ErrorModal from "../../component/common/error/ErrorModal";
-import SpinnerModal from "../../component/common/loading/SpinnerModal";
 import "../../component/common/meal/Botun.css"
 
 export default function Employees() {
