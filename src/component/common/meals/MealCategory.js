@@ -11,9 +11,9 @@ import {
     Placeholder, PlaceholderButton,
     Spinner
 } from "react-bootstrap";
+import "./MealCategory.css"
 import axios from "../../../api/axios";
 import ErrorModal from "../error/ErrorModal";
-import SpinnerModal from "../loading/SpinnerModal";
 import {LuCakeSlice, LuSoup} from "react-icons/lu";
 import {GiHotMeal, GiMeal} from "react-icons/gi";
 import {FaPizzaSlice} from "react-icons/fa";
@@ -121,15 +121,15 @@ const MealCategory = ({category, meals, setMeals, loading}) => {
                             <tr className={"fs-4"}>
                                 <td>
                                     <Placeholder animation={"glow"}>
-                                        <Placeholder xs={5} size={"lg"} />
+                                        <Placeholder xs={5} size={"lg"} bg={"light"}/>
                                     </Placeholder>
                                 </td>
                                 <td>
                                     <Placeholder animation={"glow"}>
-                                        <Placeholder xs={1} size={"lg"} />
+                                        <Placeholder xs={1} size={"lg"} bg={"light"}/>
                                     </Placeholder>
                                     {auth?.accessToken &&
-                                        <PlaceholderButton variant={"primary"} xs={1} className={"ms-3"}/>
+                                        <PlaceholderButton xs={1} className={"background ms-3"}/>
                                     }
                                     {auth?.accessToken &&
                                         <PlaceholderButton variant={"danger"} xs={1} className={"ms-3"}/>

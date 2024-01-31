@@ -15,43 +15,43 @@ const SubDailyMenu = ({title, menus, meals, setDailyMenu, loading}) => {
                     <h2 className={"text-black"}>{title}</h2>
                 </Row>
                 {loading ? Array.from({length: 3}).map((_, index) => (
-                    <Row className={"bg-secondary-subtle p-3"}>
-                        <Container className={"border-bottom border-2 border-black p-2"}>
+                    <Row className={"bg-black p-3"}>
+                        <Container className={"border-bottom border-2 bottom p-2"}>
                             <Row>
                                 <Col>
                                     <Placeholder animation={"glow"}>
-                                        <Placeholder xs={4} size={"lg"}/>
+                                        <Placeholder xs={4} size={"lg"} bg={"light"}/>
                                     </Placeholder>
                                 </Col>
                                     {auth?.accessToken &&
-                                        <PlaceholderButton variant={"primary"} xs={2} size={"sm"} className={"ms-auto me-4"}/>
+                                        <PlaceholderButton xs={2} size={"sm"} className={"background ms-auto me-4"}/>
                                     }
                             </Row>
-                            <Row className={"border-bottom border-primary-subtle"}>
+                            <Row className={"border-bottom border-primary-subtle bottom"}>
                                 <Col>
                                     <Placeholder animation={"glow"}>
-                                        <Placeholder xs={2} size={"xs"}/>
+                                        <Placeholder xs={2} size={"xs"} bg={"light"}/>
                                     </Placeholder>
                                 </Col>
                             </Row>
-                            <Row className={"border-bottom border-primary-subtle"}>
+                            <Row className={"border-bottom border-primary-subtle bottom"}>
                                 <Col>
                                     <Placeholder animation={"glow"}>
-                                        <Placeholder xs={3} size={"xs"}/>
+                                        <Placeholder xs={3} size={"xs"} bg={"light"}/>
                                     </Placeholder>
                                 </Col>
                             </Row>
-                            <Row className={"border-bottom border-primary-subtle"}>
+                            <Row className={"border-bottom border-primary-subtle bottom"}>
                                 <Col>
                                     <Placeholder animation={"glow"}>
-                                        <Placeholder xs={1} size={"xs"}/>
+                                        <Placeholder xs={1} size={"xs"} bg={"light"}/>
                                     </Placeholder>
                                 </Col>
                             </Row>
-                            <Row className={"border-bottom border-primary-subtle"}>
+                            <Row className={"border-bottom border-primary-subtle bottom"}>
                                 <Col>
                                     <Placeholder animation={"glow"}>
-                                        <Placeholder xs={2} size={"xs"}/>
+                                        <Placeholder xs={2} size={"xs"} bg={"light"}/>
                                     </Placeholder>
                                 </Col>
                             </Row>
