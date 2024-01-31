@@ -1,5 +1,5 @@
 import useAuth from "../../../hooks/useAuth";
-import {Alert, Button, Form, Modal, ModalHeader, Spinner} from "react-bootstrap";
+import {Button, Form, Modal, Spinner} from "react-bootstrap";
 import {useEffect, useRef, useState} from "react";
 import Meal from "./Meal";
 import axios from "../../../api/axios";
@@ -17,6 +17,10 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
     const [mainMeals, setMainMeals] = useState([])
     const [sideDishes, setSideDishes] = useState([])
     const [desserts, setDesserts] = useState([])
+    const [soup, setSoup] = useState(menu?.meals.filter(meal => meal.category === "Soup")[0])
+    const [mainMeal, setMainMeal] = useState(menu?.meals.filter(meal => meal.category === "Main meal" || meal.category === "Pizza")[0])
+    const [sideDish, setSideDish] = useState(menu?.meals.filter(meal => meal.category === "Side dish")[0])
+    const [dessert, setDessert] = useState(menu?.meals.filter(meal => meal.category === "Dessert")[0])
     const [errorMessage, setErrorMessage] = useState("")
     const [loading, setLoading] = useState(false)
 
@@ -42,14 +46,11 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
 
         setLoading(true)
         try {
-            const responsePatchMenu = await axios.patch(`/menus/${menu.id}`, newMenu)
+            const responsePatchMenu = await axios.patch(`/menus/${menu.id}`, newMenu).then()
             console.log(responsePatchMenu.data)
 
             setDailyMenu(prevMenus => {
-                const newMenus = [...prevMenus];
-                const index = newMenus.findIndex(m => m.id === menu.id);
-                newMenus[index] = responsePatchMenu.data;
-                return newMenus;
+                return prevMenus.map(m => m.id === menu.id ? responsePatchMenu.data : m);
             });
             setShowEditMenuModal(false);
         }
@@ -57,6 +58,7 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
             console.log(error)
             setErrorMessage("An error occurred")
         }
+        window.location.reload()
         setLoading(false)
     }
 
@@ -86,7 +88,10 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
                                         className={"botun border-2 rounded fs-5"}
                                         onClick={() => {
                                             setShowEditMenuModal(true)
-                                            console.log(menu)
+                                            console.log(soup.name)
+                                            console.log(mainMeal.name)
+                                            console.log(sideDish.name)
+                                            console.log(dessert.name)
                                         }}
                                     >
                                         <i className={"bi bi-pencil-square text-black"}></i>
@@ -98,10 +103,10 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
                         }
                       </div>
                     <div className={"col fs-5"}>
-                        {menu && menu.soup && <Meal mealName={menu.soup} mealCategory={"Soup"} />}
-                        {menu && menu.main_meal && <Meal mealName={menu.main_meal} mealCategory={"Main meal"} />}
-                        {menu && menu.side_dish && <Meal mealName={menu.side_dish} mealCategory={"Side dish"} />}
-                        {menu && menu.dessert && <Meal mealName={menu.dessert} mealCategory={"Dessert"} />}
+                        {soup && <Meal mealName={soup.name} mealCategory={"Soup"}/>}
+                        {mainMeal && <Meal mealName={mainMeal.name} mealCategory={"Main meal"} />}
+                        {sideDish && <Meal mealName={sideDish.name} mealCategory={"Side dish"} />}
+                        {dessert && <Meal mealName={dessert.name} mealCategory={"Dessert"} />}
                     </div>
                 </div>
             </div>
@@ -118,7 +123,7 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
                     <Form ref={editMenuFormRef} onSubmit={handleEditMenu}>
                         <Form.Group className={"mb-3"} controlId={"selectSoup"}>
                             <Form.Label>Select a soup</Form.Label>
-                            <Form.Select className={"sirina fs-6"} name={"soup"} defaultValue={menu.soup}>
+                            <Form.Select className={"sirina fs-6"} name={"soup"} defaultValue={soup.name}>
                                 {soups.map((soup) =>
                                     <option
                                         key={soup.id}
@@ -131,7 +136,7 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
                         </Form.Group>
                         <Form.Group className={"mb-3"} controlId={"selectMainMeal"}>
                             <Form.Label>Select a main meal</Form.Label>
-                            <Form.Select className={"sirina fs-6"} name={"mainMeal"} defaultValue={menu.main_meal}>
+                            <Form.Select className={"sirina fs-6"} name={"mainMeal"} defaultValue={mainMeal.name}>
                                 {mainMeals.map((mainMeal) =>
                                     <option
                                         key={mainMeal.id}
@@ -144,7 +149,7 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
                         </Form.Group>
                         <Form.Group className={"mb-3"} controlId={"selectSideDish"}>
                             <Form.Label>Select a side dish</Form.Label>
-                            <Form.Select className={"sirina fs-6"} name={"sideDish"} defaultValue={menu.side_dish}>
+                            <Form.Select className={"sirina fs-6"} name={"sideDish"} defaultValue={sideDish.name}>
                                 {sideDishes.map((sideDish) =>
                                     <option
                                         key={sideDish.id}
@@ -157,7 +162,7 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
                         </Form.Group>
                         <Form.Group className={"mb-3"} controlId={"selectDessert"}>
                             <Form.Label>Select a dessert</Form.Label>
-                            <Form.Select className={"sirina fs-6"} name={"dessert"} defaultValue={menu.dessert}>
+                            <Form.Select className={"sirina fs-6"} name={"dessert"} defaultValue={dessert.name}>
                                 {desserts.map((dessert) =>
                                     <option
                                         key={dessert.id}

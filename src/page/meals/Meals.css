@@ -6,6 +6,11 @@
     background-color: #FFF2CB;
 }
 
+.background {
+    background-color: #DCB341 !important;
+    border-color: #AC820E !important;
+}
+
 th{
     background-color: black !important;
 }

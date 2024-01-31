@@ -2,7 +2,7 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 
 const useAxiosPrivate = () => {
-    const {auth, setAuth} = useAuth()
+    const {setAuth} = useAuth()
 
     const axiosPrivate = axios.create({
         baseURL: 'http://localhost:8000/api/',

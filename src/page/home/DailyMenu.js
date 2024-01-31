@@ -12,7 +12,7 @@ const DailyMenu = () => {
     const [dailyMenu, setDailyMenu] = useState([]);
     const [lunch, setLunch] = useState([]);
     const [dinner, setDinner] = useState([]);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
 
@@ -22,7 +22,6 @@ const DailyMenu = () => {
                 const getMenusResponse = await axios.get('/daily-menus')
                 const getMealsResponse = await axios.get('/meals')
                 console.log(getMenusResponse?.data)
-                console.log(getMealsResponse?.data)
                 setMeals(getMealsResponse?.data)
                 setDailyMenu(getMenusResponse?.data)
             }

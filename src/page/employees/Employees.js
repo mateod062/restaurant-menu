@@ -166,24 +166,21 @@ export default function Employees() {
                         </thead>
                         <tbody>
                         {loading ? (
-                            /*<Spinner animation="border" role="status" className={"my-auto mx-auto"}>
-                                <span className="visually-hidden">Loading...</span>
-                            </Spinner>*/
                             Array.from({length: 5}).map((_, index) => (
-                                <tr key={index} className={"table-secondary border-bottom border-black"}>
+                                <tr key={index} className={"border-bottom bottom"}>
                                     <td>
                                         <Placeholder animation="glow">
-                                            <Placeholder xs={10}/>
+                                            <Placeholder xs={10} bg={"light"}/>
                                         </Placeholder>
                                     </td>
                                     <td>
                                         <Placeholder animation="glow">
-                                            <Placeholder xs={8}/>
+                                            <Placeholder xs={8} bg={"light"}/>
                                         </Placeholder>
                                     </td>
                                     <td>
                                         <Placeholder animation="glow">
-                                            <Placeholder xs={5}/>
+                                            <Placeholder xs={5} bg={"light"}/>
                                         </Placeholder>
                                     </td>
                                     {auth?.accessToken && auth?.isAdmin &&
@@ -230,8 +227,8 @@ export default function Employees() {
                                 <tr className={"table-secondary"}>
                                     <td colSpan={3} align={"left"}>
                                         {loading ? (
-                                            <Placeholder.Button variant={"primary"} xs={3} />
-                                        ) : (<Button variant={"primary"} className={"botun text-black fs-5 fw-bolder mt-3"} onClick={() => {
+                                            <Placeholder.Button className={"background"} xs={3} />
+                                        ) : (<Button className={"botun text-black fs-5 fw-bolder mt-3"} onClick={() => {
                                             setShowAddEmployeeModal(true)
                                         }}
                                         >

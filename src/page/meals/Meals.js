@@ -60,15 +60,11 @@ const Meals = () => {
         try {
             const responsePostMeal = await axios.post('/meals', newMeal)
             console.log(responsePostMeal.data)
-            setMeals(prevMeals => {
-                const mealToAdd = {
-                    id: responsePostMeal.data.id,
-                    name: responsePostMeal.data.name,
-                    category: responsePostMeal.data.category,
-                    price: responsePostMeal.data.price
-                }
-                return [...prevMeals, mealToAdd]
-            })
+            const responseGetMeals = await axios.get('/meals')
+            console.log(responseGetMeals.data)
+
+            setMeals(responseGetMeals?.data)
+            localStorage.setItem('meals', JSON.stringify(responseGetMeals.data));
 
             setAddMealFormValidated(false)
             setShowModal(false);
@@ -77,7 +73,9 @@ const Meals = () => {
             console.log(error)
             setErrorMessage("An error occurred.")
         }
+/*
         setLoading(false)
+*/
 
         localStorage.removeItem('meals')
     }
@@ -126,7 +124,7 @@ const Meals = () => {
                             <div className={"d-flex"}>
                                 Price of meal
                                 {loading && auth?.accessToken && (
-                                    <PlaceholderButton variant={"primary"} xs={3} className={"ms-auto"} />
+                                    <PlaceholderButton xs={3} className={"background ms-auto"} />
                                 )}
                                 {!loading && auth?.accessToken && (
                                     <Button
@@ -144,7 +142,7 @@ const Meals = () => {
                     </thead>
                     <MealCategory category={"Pizzas"} meals={pizzas} setMeals={setMeals} loading={loading}/>
                     <MealCategory category={"Soups"} meals={soups} setMeals={setMeals} loading={loading}/>
-                    <MealCategory category={"Main dishes"} meals={mainMeals} setMeals={setMeals} loading={loading}/>
+                    <MealCategory category={"Main meals"} meals={mainMeals} setMeals={setMeals} loading={loading}/>
                     <MealCategory category={"Side dishes"} meals={sideDishes} setMeals={setMeals} loading={loading}/>
                     <MealCategory category={"Desserts"} meals={desserts} setMeals={setMeals} loading={loading}/>
                 </Table>
