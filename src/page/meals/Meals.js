@@ -18,6 +18,7 @@ import {
 import "./Meals.css"
 import "../../component/common/meal/Border.css"
 import ErrorModal from "../../component/common/error/ErrorModal";
+import "../../component/common/meal/Botun.css"
 
 const Meals = () => {
     const localStorage = window.localStorage
@@ -114,25 +115,25 @@ const Meals = () => {
 
     return (
         <Content subtitle={"Meals"}>
-            <div className={"container rounded border border-3 bg-black w-50 mx-auto pt-3 my-4 fs-3"}>
+            <div className={"container rounded border border-3 bg-black w-50 mx-auto mb-5 fs-3"}>
                 <Table variant={"dark"}>
                     <thead className={"bg-darkblue"}>
                       <tr className={"border-bottom bottom"}>
-                        <th scope={"col"}>Naziv jela</th>
-                        <th scope={"col"}>
-                            <div className={"d-flex flex-row gap-5"}>
-                                Cijena jela
+                        <th scope={"col"} className={"fs-3"}>Name of meal</th>
+                        <th scope={"col"} className={"fs-3"}>
+                            <div className={"d-flex"}>
+                                Price of meal
                                 {loading && auth?.accessToken && (
                                     <PlaceholderButton xs={3} className={"background ms-auto"} />
                                 )}
                                 {!loading && auth?.accessToken && (
                                     <Button
                                         variant={"primary"}
-                                        className={auth?.accessToken ? "ms-auto" : "invisible"}
+                                        className={auth?.accessToken ? "ms-auto botun text-black fs-6" : "invisible"}
                                         onClick={() => setShowModal(true)}
                                     >
-                                        <i className={"bi bi-plus-square"}></i>
-                                        <span className={"ms-2"}>Add meal</span>
+                                        <i className={"bi bi-plus-square fs-5"}></i>
+                                        <span className={"ms-2 fw-semibold fs-5"}>Add meal</span>
                                     </Button>
                                 )}
                             </div>
@@ -149,13 +150,13 @@ const Meals = () => {
 
             <ErrorModal show={showErrorModal} onHide={() => setShowErrorModal(false)} message={errorMessage} />
 
-            <Modal show={showModal} onHide={() => setShowModal(false)} backdrop="static">
-                <Modal.Header className={"bg-primary text-white"} closeButton>
-                    <Modal.Title>Add Meal</Modal.Title>
+            <Modal className={"d-flex align-items-center w-100"} show={showModal} onHide={() => setShowModal(false)} backdrop="static">
+                <Modal.Header className={"background text-black fs-4 w-100"} closeButton>
+                    <Modal.Title className={"fs-4"}>Add Meal</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className={"boja2 fs-6 border-top-0"}>
                     <Form validated={addMealFormValidated} ref={addMealFormRef} onSubmit={handleAddMeal}>
-                        <Form.Group className={"mb-3"} controlId={"mealName"}>
+                        <Form.Group className={"mb-3 sirina2"} controlId={"mealName"}>
                             <FloatingLabel label={"Name"} className={"mb-3"}>
                                 <Form.Control
                                     name={"name"}
@@ -209,7 +210,7 @@ const Meals = () => {
                                 />
                             </div>
                         </Form.Group>
-                        <Form.Group className={"mb-3"} controlId={"mealPrice"}>
+                        <Form.Group className={"mb-3 sirina2"} controlId={"mealPrice"}>
                             <InputGroup hasValidation className={"mb-3"}>
                                 <FloatingLabel label={"Price"}>
                                     <Form.Control
@@ -229,8 +230,8 @@ const Meals = () => {
                         </Form.Group>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant={"secondary"} onClick={() => {
+                <Modal.Footer className={"boja2 border-top-0"}>
+                    <Button className={"fs-6 bg-black fw-semibold"} variant={"secondary"} onClick={() => {
                         {
                             setShowModal(false)
                             setAddMealFormValidated(false)
@@ -238,7 +239,7 @@ const Meals = () => {
                     }}>
                         Close
                     </Button>
-                    <Button variant={"primary"} onClick={handleAddMeal}>
+                    <Button className={"fs-6 botun text-black fw-semibold"} variant={"primary"} onClick={handleAddMeal}>
                         {loading ? (
                             <Spinner animation="border" role="status">
                                 <span className="visually-hidden">Loading...</span>

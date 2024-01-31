@@ -20,7 +20,7 @@ const Meal = ({mealName, mealCategory}) => {
     }
 
     return (
-        <div className={"container border-bottom border-primary-subtle bottom p-1"}>
+        <div className={"container border-bottom border-primary-subtle bottom p-1 FS-5"}>
             <div className={"d-flex flex-row justify-content-between pe-4"}>
                 {name}
                 {icon()}

@@ -9,7 +9,7 @@ const SubDailyMenu = ({title, menus, meals, setDailyMenu, loading}) => {
     const {auth} = useAuth()
 
     return (
-        <Container className={"border rounded border-3 w-50 mx-2 my-4"}>
+        <Container className={"d-flex align-middle border rounded border-3 w-50"}>
             <Col>
                 <Row className={"background"}>
                     <h2 className={"text-black"}>{title}</h2>

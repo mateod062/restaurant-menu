@@ -6,6 +6,7 @@ import axios from "../../../api/axios";
 import ErrorModal from "../error/ErrorModal";
 import SpinnerModal from "../loading/SpinnerModal";
 import "./Border.css"
+import "./Botun.css"
 
 const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) => {
     const {auth} = useAuth()
@@ -75,16 +76,16 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
                 : "container p-2"
             }>
                 <div className={"row"}>
-                    <div className={"row"}>
+                    <div className={"col"}>
                         <div className={"col"}>
                             <h3>{menu.title}</h3>
                         </div>
                         {
                             auth?.accessToken
-                                ? <div className={"col"} align={"end"}>
+                                ? <div className={"col d-flex justify-content-end"}>
                                     <button
                                         type={"button"}
-                                        className={"btn btn-primary"}
+                                        className={"botun border-2 rounded fs-5"}
                                         onClick={() => {
                                             setShowEditMenuModal(true)
                                             console.log(soup.name)
@@ -93,15 +94,15 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
                                             console.log(dessert.name)
                                         }}
                                     >
-                                        <i className={"bi bi-pencil-square"}></i>
-                                        <span className={"ms-2"}>Edit</span>
+                                        <i className={"bi bi-pencil-square text-black"}></i>
+                                        <span className={"ms-2 text-black"}>Edit</span>
                                     </button>
                                   </div>
                                 : null
 
                         }
                       </div>
-                    <div className={"col"}>
+                    <div className={"col fs-5"}>
                         {soup && <Meal mealName={soup.name} mealCategory={"Soup"}/>}
                         {mainMeal && <Meal mealName={mainMeal.name} mealCategory={"Main meal"} />}
                         {sideDish && <Meal mealName={sideDish.name} mealCategory={"Side dish"} />}
@@ -114,15 +115,15 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
 
             <SpinnerModal show={loading && !showEditMenuModal} />
 
-            <Modal show={showEditMenuModal} onHide={() => setShowEditMenuModal(false)}>
-                <Modal.Header className={"bg-primary text-white"} closeButton>
-                    <Modal.Title>Edit {menu.title}</Modal.Title>
+            <Modal className={"d-flex align-items-center w-100"} show={showEditMenuModal} onHide={() => setShowEditMenuModal(false)}>
+                <Modal.Header className={"background text-black fs-4 w-100"} closeButton>
+                    <Modal.Title className={"fs-4"}>Edit {menu.title}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className={"boja2 fs-6 border-top-0"}>
                     <Form ref={editMenuFormRef} onSubmit={handleEditMenu}>
                         <Form.Group className={"mb-3"} controlId={"selectSoup"}>
                             <Form.Label>Select a soup</Form.Label>
-                            <Form.Select name={"soup"} defaultValue={soup.name}>
+                            <Form.Select className={"sirina fs-6"} name={"soup"} defaultValue={soup.name}>
                                 {soups.map((soup) =>
                                     <option
                                         key={soup.id}
@@ -135,7 +136,7 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
                         </Form.Group>
                         <Form.Group className={"mb-3"} controlId={"selectMainMeal"}>
                             <Form.Label>Select a main meal</Form.Label>
-                            <Form.Select name={"mainMeal"} defaultValue={mainMeal.name}>
+                            <Form.Select className={"sirina fs-6"} name={"mainMeal"} defaultValue={mainMeal.name}>
                                 {mainMeals.map((mainMeal) =>
                                     <option
                                         key={mainMeal.id}
@@ -148,7 +149,7 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
                         </Form.Group>
                         <Form.Group className={"mb-3"} controlId={"selectSideDish"}>
                             <Form.Label>Select a side dish</Form.Label>
-                            <Form.Select name={"sideDish"} defaultValue={sideDish.name}>
+                            <Form.Select className={"sirina fs-6"} name={"sideDish"} defaultValue={sideDish.name}>
                                 {sideDishes.map((sideDish) =>
                                     <option
                                         key={sideDish.id}
@@ -161,7 +162,7 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
                         </Form.Group>
                         <Form.Group className={"mb-3"} controlId={"selectDessert"}>
                             <Form.Label>Select a dessert</Form.Label>
-                            <Form.Select name={"dessert"} defaultValue={dessert.name}>
+                            <Form.Select className={"sirina fs-6"} name={"dessert"} defaultValue={dessert.name}>
                                 {desserts.map((dessert) =>
                                     <option
                                         key={dessert.id}
@@ -174,11 +175,11 @@ const Menu = ({dailyMenuTitle, meals, menu, setDailyMenu, bottomLine = true}) =>
                         </Form.Group>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant={"secondary"} onClick={() => setShowEditMenuModal(false)}>
+                <Modal.Footer className={"boja2 border-top-0"}>
+                    <Button className={"fs-6 bg-black fw-semibold"} variant={"secondary"} onClick={() => setShowEditMenuModal(false)}>
                         Close
                     </Button>
-                    <Button variant={"primary"} onClick={handleEditMenu}>
+                    <Button className={"fs-6 botun text-black fw-semibold"} variant={"primary"} onClick={handleEditMenu}>
                         {loading ? (
                             <Spinner animation="border" role="status" size={"sm"}>
                                 <span className="visually-hidden">Loading...</span>

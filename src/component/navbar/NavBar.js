@@ -45,33 +45,33 @@ const NavBar = () => {
         <nav className={"navbar navbar-expand-lg fixed-top bg-black"}>
           <div className={"container-fluid"}>
             <div className={"d-flex flex-row gap-2 ms-3"}>
-              <FaUtensils className={"navbar-nav text-white my-auto"} />
-              <Link to={"/"} className={"navbar-brand text-white fw-bold"}>Restaurant Mini</Link>
+              <FaUtensils className={"navbar-nav text my-auto fs-2"} />
+              <Link to={"/"} className={"navbar-brand text fw-bold fs-2"}>Restaurant Mini</Link>
             </div>
-            <ul className="navbar-nav ms-auto me-2 mb-2 mb-lg-0">
+            <ul className="navbar-nav fs-3">
               <li className="nav-item">
-                <Link className={"nav-link"} to="/">Menu</Link>
+                <Link className={"nav-link text"} to="/">Menu</Link>
               </li>
               <li className="nav-item">
-                <Link className={"nav-link"} to="/meals">Meals</Link>
+                <Link className={"nav-link text"} to="/meals">Meals</Link>
               </li>
               <li className="nav-item">
-                <Link className={"nav-link"} to="/employees">Employees</Link>
+                <Link className={"nav-link text"} to="/employees">Employees</Link>
               </li>
               <li className="nav-item">
-                <Link className={"nav-link"} to="/info">Info</Link>
+                <Link className={"nav-link text"} to="/info">Info</Link>
               </li>
               <li className="nav-item">
                 {auth?.accessToken
-                    ? <button className={"nav-link"} onClick={handleLogout}>Logout</button>
-                    : <Link className={"nav-link"} to="/login">Login</Link>
+                    ? <button className={"nav-link text"} onClick={handleLogout}>Logout</button>
+                    : <Link className={"nav-link text"} to="/login">Login</Link>
                 }
               </li>
               <li className={"nav-item"}>
                 {auth?.accessToken
-                    ? <div className={"d-flex flex-row gap-1 mt-2 ms-3"}>
-                      <i className={"bi bi-person-fill"}></i>
-                      <span className={""}>{auth?.firstName}</span>
+                    ? <div className={"d-flex flex-row gap-1 mt-2 ms-4"}>
+                      <i className={"bi bi-person-fill text"}></i>
+                      <span className={"text"}>{auth?.firstName}</span>
                     </div>
                     : null
                 }
